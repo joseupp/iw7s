@@ -38,7 +38,6 @@ Current version: **r1000b** (beta).
   - Aim-down-sights zoom consistent with the chosen FOV.
   - Sniper scopes as in the original.
   - Properly framed winners' circle.
-- **Adjustable HUD tilt.** You can make it flat, keep it as the original or choose something in between. The top part is adjusted separately and moves closer to the screen edges.
 - **Ammo bar** in multiplayer.
 
 ### Convenience and stability
