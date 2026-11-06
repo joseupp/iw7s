@@ -557,8 +557,8 @@ namespace ui_scripting
 			game::Dvar_RegisterBool("ui_showList", false, game::DVAR_FLAG_SAVED, "Show the current menus on the UI stack");
 
 			// ui_scripts/hud_tilt: inclinación del HUD (0 plano, 1 como el original)
-			game::Dvar_RegisterFloat("cg_hudTilt", 0.0f, 0.0f, 1.0f, game::DVAR_FLAG_SAVED, "HUD tilt: 0 flat, 1 original");
-			game::Dvar_RegisterFloat("cg_hudTiltTop", -1.0f, -1.0f, 1.0f, game::DVAR_FLAG_SAVED,
+			game::Dvar_RegisterFloat("cg_hudTilt", 0.8f, 0.0f, 1.0f, game::DVAR_FLAG_SAVED, "HUD tilt: 0 flat, 1 original");
+			game::Dvar_RegisterFloat("cg_hudTiltTop", 0.4f, -1.0f, 1.0f, game::DVAR_FLAG_SAVED,
 				"HUD tilt of the minimap (top): -1 same as cg_hudTilt, 0 flat, 1 original");
 
 			utils::hook::jump(0x1411C8DB0, removed_function_stub);
