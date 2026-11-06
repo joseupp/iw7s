@@ -68,8 +68,10 @@ end
 
 scaled("SetCurvedRenderingX")
 scaled("SetCurvedRenderingY")
-scaled("SetXRotation")
-scaled("SetYRotation")
+-- Solo giros pequeños (la inclinación del HUD). Algunos elementos se ocultan girándolos 90 grados (de canto): si se
+-- escalara ese giro se verían como una línea cruzando la pantalla.
+scaled("SetXRotation", 45)
+scaled("SetYRotation", 45)
 scaled("SetZRotation", 20)
 
 -- Widgets de arriba más pegados al borde, con el mismo margen que los de abajo. Al quitarles inclinación quedan más
