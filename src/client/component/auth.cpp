@@ -15,7 +15,6 @@
 #include <utils/smbios.hpp>
 #include <utils/info_string.hpp>
 #include <utils/cryptography.hpp>
-#include <utils/properties.hpp>
 #include <utils/io.hpp>
 
 namespace auth
@@ -29,7 +28,7 @@ namespace auth
 				// other player stuff starts at 2, not 1
 				for (auto i = 1; i <= 8; ++i)
 				{
-					const auto mutex = CreateMutexA(nullptr, FALSE, utils::string::va("iw7-mod-player-%d", i));
+					const auto mutex = CreateMutexA(nullptr, FALSE, utils::string::va("iw7s-player-%d", i));
 					if (!mutex)
 					{
 						break;
@@ -52,7 +51,7 @@ namespace auth
 
 		std::string get_key_path(const char* name)
 		{
-			return (utils::properties::get_appdata_path() / utils::string::va("iw7-%s%s.key", name, get_player_suffix().data())).generic_string();
+			return utils::string::va("iw7s/players2/iw7-%s%s.key", name, get_player_suffix().data()); // carpeta del juego (sin AppData)
 		}
 
 		std::string get_hdd_serial()

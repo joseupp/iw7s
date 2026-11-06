@@ -1,0 +1,1572 @@
+version 115
+rule killswitch_cod_points 0
+rule killswitch_combat_record 0
+rule killswitch_announcers 0
+rule killswitch_streak_variants 0
+rule killswitch_simultaneous_deaths 0
+rule killswitch_custom_emblems 0
+rule killswitch_blood_anvil 0
+rule killswitch_matchID 1
+rule killswitch_net_health_icons 1
+rule killswitch_net_health_dev 1
+rule killswitch_store 1
+rule online_party_double_xp 1
+rule online_double_keys 1
+rule online_mp_weapon_xpscale 2
+rule online_mp_party_xpscale 1
+rule online_mp_xpscale 2
+rule online_mp_party_missionteam_xpscale 1
+rule online_mp_party_weapon_xpscale 1
+rule online_mp_missionteam_xpscale 2
+rule online_zombies_xpscale 2
+rule online_zombie_party_weapon_xpscale 1
+rule online_zombie_weapon_xpscale 2
+rule online_zombie_party_xpscale 1
+rule ui_allow_teamchange 1
+rule ui_allow_classchange 1
+rule ui_allow_controlschange 1
+rule ui_allowvote 1
+rule teamsVisible 1
+rule lobby_team_select 1
+rule mission_team_contracts_enabled 1
+
+rule sv_usePrecomputedLOSData 1
+rule scr_useSpawnPathSight 1
+rule ds_dcid 0
+rule ds_parklist 9000
+rule ds_logfile 0
+rule online_matchmaking_no_dedi_search 1
+set online_matchmaking_dedi_required 0
+set online_matchmaking_use_sbmm 0
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 1
+set validate_drop_on_fail 1
+set compassPrototypeElevation 1
+set compassPrototypeFiring 1
+rule party_minlobbytime 30
+rule party_minplayers 14
+rule party_maxplayers 18
+rule party_matchedplayercount 1
+rule mming_minplayers_to_lobby 1
+rule party_minVoteTime 20
+rule scr_team_fftype 0
+rule scr_player_healthregentime 3
+rule scr_player_maxhealth 100
+rule scr_war_waverespawndelay 0
+rule scr_game_allowkillcam 1
+rule scr_hardcore 0
+rule ui_hud_hardcore 0
+rule ui_hardcore 0
+rule scr_playlist_type 0
+rule allowIntel 0
+rule scr_game_doublejump 1
+rule scr_game_wallrun 1
+rule r_materialLodOverride -1
+rule jump_slowdownEnable 0
+rule sprintLeap_enabled 1
+rule scr_tactical 0
+rule scr_game_superFastChargeRate 1
+rule scr_game_casualScoreStreaks 0
+rule killswitch_simultaneous_deaths 1
+rule scr_war_crankedBombTimer 0
+rule scr_war_scorelimit 75
+rule scr_eom_combat 1
+rule scr_eom_slowmo 0
+rule scr_lethalDelay	5
+rule scr_superDelay 5
+rule scr_dm_scorelimit 30
+rule cg_everyonehearseveryone 0
+rule partyChatDisallowed 0
+rule bot_autoconnectdefault 1
+rule bot_difficultydefault 4
+rule mp_bots_sec_before_lobby_autofill 15
+rule xblive_competitionmatch 0
+rule scr_direct_to_grey 0
+rule scr_direct_to_super_slasher 0
+rule scr_direct_to_rat_king 0
+rule scr_direct_to_crab_boss 0
+rule scr_direct_to_rhino_fight 0
+rule scr_direct_to_meph_fight 0
+rule scr_boss_battles_enabled 0
+
+gametype tdm
+name PLAYLIST_TDM_NAME
+abbrv PLAYLIST_TDM_ABBRV
+script war
+recipe 14
+rule scr_war_scorelimit 75
+teambased
+gametype ctdm
+name PLAYLIST_TDM_NAME
+abbrv PLAYLIST_TDM_ABBRV
+script war
+recipe 15
+rule scr_war_scorelimit 75
+rule scr_casual_score_streaks 1
+teambased
+gametype front
+name PLAYLIST_FL_TDM_NAME
+abbrv PLAYLIST_FL_TDM_ABBRV
+script front
+recipe 16
+teambased
+rule scr_spawn_protection_timer 5
+gametype ffa
+name PLAYLIST_FFA_NAME
+abbrv PLAYLISt_FFA_ABBRV
+script dm
+recipe 17
+rule scr_dm_scorelimit 30
+rule scr_dm_aonrules 0
+gametype aon
+name PLAYLIST_FFA_NAME
+abbrv PLAYLISt_FFA_ABBRV
+script dm
+recipe 18
+rule scr_dm_scorelimit 20
+rule scr_dm_aonrules 1
+gametype gesture
+name PLAYLIST_GESTURE_NAME
+abbrv PLAYLISt_GESTURE_ABBRV
+script dm
+recipe 19
+rule scr_dm_scorelimit 20
+rule scr_dm_aonrules 3
+gametype hyper_tdm
+name PLAYLIST_TDM_NAME
+abbrv PLAYLIST_TDM_ABBRV
+script war
+recipe 20
+teambased
+rule scr_game_superFastChargeRate 7
+gametype dom
+name PLAYLIST_DOM_NAME
+abbrv PLAYLIST_DOM_ABBRV
+script dom
+recipe 21
+teambased
+gametype sd
+name PLAYLIST_SD_NAME
+abbrv PLAYLIST_SD_ABBRV
+script sd
+recipe 22
+teambased
+gametype conf_tdm
+name PLAYLIST_CONF_NAME
+abbrv PLAYLIST_CONF_ABBRV
+script conf
+recipe 23
+rule scr_conf_scorelimit 50
+teambased
+gametype gun_epic
+name PLAYLIST_GUN_NAME_EPIC
+abbrv PLAYLIST_GUN_ABBRV
+script gun
+recipe 0
+gametype gun
+name PLAYLIST_GUN_NAME
+abbrv PLAYLIST_GUN_ABBRV
+script gun
+recipe 24
+gametype infect_shotgun
+name PLAYLIST_INFECT_NAME_SHOTGUN
+abbrv PLAYLIST_INFECT_ABBRV
+script infect
+recipe 1
+gametype infect_ar
+name PLAYLIST_INFECT_NAME_AR
+abbrv PLAYLIST_INFECT_ABBRV
+script infect
+recipe 2
+gametype infect_smg
+name PLAYLIST_INFECT_NAME_SMG
+abbrv PLAYLIST_INFECT_ABBRV
+script infect
+recipe 3
+gametype infect_sniper
+name PLAYLIST_INFECT_NAME_SNIPER
+abbrv PLAYLIST_INFECT_ABBRV
+script infect
+recipe 4
+gametype infect_pistol
+name PLAYLIST_INFECT_NAME_PISTOL
+abbrv PLAYLIST_INFECT_PISTOL_ABBRV
+script infect
+recipe 5
+gametype infect_supers
+name PLAYLIST_INFECT_NAME_SUPERS
+abbrv PLAYLIST_INFECT_SUPERS_ABBRV
+script infect
+recipe 6
+gametype sr
+name PLAYLIST_SR_NAME
+abbrv PLAYLIST_SR_ABBRV
+script sr
+recipe 25
+teambased
+gametype grind
+name PLAYLIST_GRIND_NAME
+abbrv PLAYLIST_GRIND_ABBRV
+script grind
+recipe 7
+teambased
+gametype blitz
+name PLAYLIST_BLITZ_NAME
+abbrv PLAYLIST_BLITZ_ABBRV
+script blitz
+teambased
+gametype cranked
+name PLAYLIST_CRANKED_NAME
+abbrv PLAYLIST_CRANKED_ABBRV
+script war
+recipe 26
+rule scr_war_crankedBombTimer 30
+rule scr_war_scorelimit 150
+teambased
+gametype sotf
+name PLAYLIST_SOTF_NAME
+abbrv PLAYLIST_SOTF_ABBRV
+script sotf
+recipe 27
+teambased
+gametype sotf_ffa
+name PLAYLIST_SOTF_FFA_NAME
+abbrv PLAYLIST_SOTF_FFA_ABBRV
+script sotf_ffa
+recipe 28
+gametype koth
+name PLAYLIST_HARDPOINT_NAME
+abbrv PLAYLIST_HARDPOINT_ABBRV
+script koth
+recipe 29
+teambased
+gametype horde
+name PLAYLIST_HORDE_NAME
+abbrv PLAYLIST_HORDE_ABBRV
+script horde
+gametype grnd
+name PLAYLIST_GRND_NAME
+abbrv PLAYLIST_GRND_ABBRV
+script grnd
+recipe 30
+teambased
+gametype grnd_var
+name PLAYLIST_GRND_NAME_VARIANT
+abbrv PLAYLIST_GRND_ABBRV
+script grnd
+teambased
+recipe 8
+gametype ball
+name PLAYLIST_UPLINK_NAME
+abbrv PLAYLIST_UPLINK_ABBRV
+script ball
+recipe 31
+teambased
+gametype ctf
+name PLAYLIST_CTF_NAME
+abbrv PLAYLIST_CTF_ABBRV
+script ctf
+recipe 32
+teambased
+gametype dd
+name PLAYLIST_DEMO_NAME
+abbrv PLAYLIST_DEMO_ABBRV
+script dd
+recipe 33
+teambased
+gametype siege
+name PLAYLIST_SIEGE_NAME
+abbrv PLAYLIST_SIEGE_ABBRV
+script siege
+recipe 34
+teambased
+gametype tdef
+name PLAYLIST_TDEF_NAME
+abbrv PLAYLIST_TDEF_ABBRV
+script tdef
+recipe 35
+teambased
+gametype hc_tdm
+name PLAYLIST_TDM_NAME
+abbrv PLAYLIST_HC_TDM_ABBRV
+script war
+recipe 36
+teambased
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_war_waverespawndelay 0
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype hc_sd
+name LUA_MENU_MP_SD_CAPS
+abbrv PLAYLIST_SD_ABBRV //NEED HC ABBRV
+script sd
+recipe 37
+teambased
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype hc_sr
+name LUA_MENU_MP_SR_CAPS
+abbrv PLAYLIST_HC_SR_ABBRV
+script sr
+recipe 38
+teambased
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype hc_ffa
+name PLAYLIST_FFA_NAME
+abbrv PLAYLIST_SOTF_FFA_ABBRV
+script dm
+recipe 39
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype hc_conf_tdm
+name LUA_MENU_MP_CONF_CAPS
+abbrv PLAYLIST_HC_CONF_TDM_ABBRV
+script conf
+recipe 40
+teambased
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype hc_dom
+name LUA_MENU_MP_DOMINATION
+abbrv PLAYLIST_HC_DOM_ABBRV
+script dom
+recipe 41
+teambased
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype hc_tdef
+name PLAYLIST_TDEF_NAME
+abbrv PLAYLIST_TDEF_ABBRV //NEED PLAYLIST_HC_TDEF_ABBRV
+script tdef
+recipe 42
+teambased
+hardcore
+rule scr_team_fftype 2
+rule scr_player_healthregentime 0
+rule scr_player_maxhealth 30
+rule scr_war_waverespawndelay 0
+rule scr_game_allowkillcam 0
+rule scr_hardcore 1
+rule ui_hud_hardcore 1
+rule ui_hardcore 1
+gametype zombie
+name PLAYLIST_ZOMBIE_NAME
+script zombie
+gametype mlg_tdm
+name PLAYLIST_MLG_TDM_NAME
+abbrv PLAYLIST_MLG_TDM_ABBRV
+script war
+recipe 9
+teambased
+gametype mlg_dom
+name PLAYLIST_MLG_DOM_NAME
+abbrv PLAYLIST_MLG_DOM_ABBRV
+script dom
+recipe 10
+teambased
+gametype mlg_blitz
+name PLAYLIST_MLG_BLITZ_NAME
+abbrv PLAYLIST_MLG_BLITZ_ABBRV
+script blitz
+recipe 11
+teambased
+gametype mlg_sr
+name PLAYLIST_MLG_SR_NAME
+abbrv PLAYLIST_MLG_SR_ABBRV
+script sr
+recipe 12
+teambased
+gametype mlg_sd
+name PLAYLIST_MLG_SD_NAME
+abbrv PLAYLIST_MLG_SD_ABBRV
+script sd
+recipe 13
+teambased
+playlist 1 // TEAM DEATHMATCH
+name PLAYLIST_TDM_NAME
+description MENU_KILL_PLAYERS_ON_OPPOSING_TEAMS
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_team_deathmatch"
+mp_frontier,tdm,1
+mp_metropolis,tdm,1
+mp_proto,tdm,1
+mp_quarry,tdm,1
+mp_divide,tdm,1
+mp_desert,tdm,1
+mp_riot,tdm,1
+mp_parkour,tdm,1
+mp_breakneck,tdm,1
+mp_rivet,tdm,1
+mp_fallen,tdm,1
+mp_dome_iw,tdm,1
+playlist 2 // FREE FOR ALL
+name PLAYLIST_FFA_NAME
+description LUA_MENU_MP_DEATHMATCH_DESC
+unlockxp 0
+maxparty 1
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule cg_everyonehearseveryone 1
+rule killswitch_simultaneous_deaths 1
+image "gamemode_free_for_all"
+mp_frontier,ffa,1
+mp_metropolis,ffa,1
+mp_proto,ffa,1
+mp_quarry,ffa,1
+mp_divide,ffa,1
+mp_desert,ffa,1
+mp_breakneck,ffa,1
+mp_rivet,ffa,1
+mp_skyway,ffa,1
+mp_dome_iw,ffa,1
+playlist 3 // DOMINATION
+name PLAYLIST_DOM_NAME
+description LUA_MENU_MP_DOMINATION_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_domination"
+mp_frontier,dom,1
+mp_metropolis,dom,1
+mp_proto,dom,1
+mp_quarry,dom,1
+mp_divide,dom,1
+mp_desert,dom,1
+mp_riot,dom,1
+mp_parkour,dom,1
+mp_breakneck,dom,1
+mp_rivet,dom,1
+mp_fallen,dom,1
+mp_dome_iw,dom,1
+playlist 4 // SEARCH AND DESTROY
+name PLAYLIST_SD_NAME
+description LUA_MENU_MP_SD_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_search_n_destroy"
+mp_frontier,sd,1
+mp_metropolis,sd,1
+mp_proto,sd,1
+mp_quarry,sd,1
+mp_divide,sd,1
+mp_desert,sd,1
+mp_riot,sd,1
+mp_parkour,sd,1
+mp_breakneck,sd,1
+mp_rivet,sd,1
+mp_fallen,sd,1
+mp_dome_iw,sd,1
+playlist 5 // HARDPOINT
+name PLAYLIST_HARDPOINT_NAME
+description LUA_MENU_MP_HARDPOINT_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_hardpoint"
+mp_frontier,koth,1
+mp_metropolis,koth,1
+mp_proto,koth,1
+mp_quarry,koth,1
+mp_divide,koth,1
+mp_desert,koth,1
+mp_riot,koth,1
+mp_parkour,koth,1
+mp_breakneck,koth,1
+mp_rivet,koth,1
+mp_fallen,koth,1
+mp_dome_iw,koth,1
+mp_skyway,koth,1
+mp_neon,koth,1
+mp_afghan,koth,1
+mp_prime,koth,1
+mp_geneva,koth,1
+mp_mansion,koth,1
+mp_marsoasis,koth,1
+mp_junk,koth,1
+mp_flip,koth,1
+mp_paris,koth,1
+mp_pixel,koth,1
+mp_overflow,koth,1
+mp_nova,koth,1
+playlist 7 // FRONTLINE TDM
+name PLAYLIST_FL_TDM_NAME
+description LUA_MENU_MP_FRONTLINE_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_frontline"
+mp_frontier,front,1
+mp_proto,front,1
+mp_quarry,front,1
+mp_divide,front,1
+mp_desert,front,1
+mp_riot,front,1
+mp_parkour,front,1
+mp_breakneck,front,1
+playlist 9 // hc_tdm gametype
+name PLAYLIST_TDM_NAME
+description PLAYLIST_HC_TDM_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_tdm_hardcore"
+mp_frontier,hc_tdm,1
+mp_metropolis,hc_tdm,1
+mp_proto,hc_tdm,1
+mp_quarry,hc_tdm,1
+mp_divide,hc_tdm,1
+mp_desert,hc_tdm,1
+mp_riot,hc_tdm,1
+mp_parkour,hc_tdm,1
+mp_breakneck,hc_tdm,1
+mp_rivet,hc_tdm,1
+mp_fallen,hc_tdm,1
+mp_dome_iw,hc_tdm,1
+mp_skyway,hc_tdm,1
+
+playlist 13 // DROP ZONE PROTOTYPES
+name PLAYLIST_GRND_NAME_VARIANT 
+description PLAYLIST_GRND_VARIANT_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_drop_zone"
+mp_frontier,grnd_var,1
+mp_metropolis,grnd_var,1
+mp_proto,grnd_var,1
+mp_quarry,grnd_var,1
+mp_divide,grnd_var,1
+mp_desert,grnd_var,1
+mp_riot,grnd_var,1
+mp_parkour,grnd_var,1
+mp_breakneck,grnd_var,1
+mp_rivet,grnd_var,1
+mp_fallen,grnd_var,1
+mp_dome_iw,grnd_var,1
+
+playlist 14 // GUN GAME
+name PLAYLIST_GUN_NAME
+description LUA_MENU_MP_GUN_DESC
+unlockxp 0
+maxparty 5
+rule party_minplayers 14
+rule party_maxplayers 10
+rule party_matchedplayercount 1
+rule killswitch_simultaneous_deaths 1
+image "gamemode_gun_game"
+mp_frontier,gun,1
+mp_metropolis,gun,1
+mp_proto,gun,1
+mp_quarry,gun,1
+mp_divide,gun,1
+mp_desert,gun,1
+mp_riot,gun,1
+mp_parkour,gun,1
+mp_breakneck,gun,1
+mp_rivet,gun,1
+mp_fallen,gun,1
+mp_dome_iw,gun,1
+
+playlist 16 // Infected
+name PLAYLIST_INFECT_NAME
+description LUA_MENU_MP_INFECT_DESC
+unlockxp 0
+maxparty 3
+rule party_minplayers 20
+rule party_maxplayers 18
+rule party_matchedplayercount 1
+image "gamemode_infected"
+mp_frontier,infect_shotgun,2
+mp_metropolis,infect_shotgun,2
+mp_proto,infect_shotgun,2
+mp_quarry,infect_shotgun,2
+mp_divide,infect_shotgun,2
+mp_desert,infect_shotgun,2
+mp_parkour,infect_shotgun,2
+mp_breakneck,infect_shotgun,2
+mp_rivet,infect_shotgun,2
+mp_fallen,infect_shotgun,2
+mp_dome_iw,infect_shotgun,2
+mp_skyway,infect_shotgun,2
+mp_afghan,infect_shotgun,2
+mp_prime,infect_shotgun,2
+mp_geneva,infect_shotgun,2
+mp_mansion,infect_shotgun,2
+mp_marsoasis,infect_shotgun,2
+mp_junk,infect_shotgun,2
+mp_flip,infect_shotgun,2
+mp_frontier,infect_ar,2
+mp_metropolis,infect_ar,2
+mp_proto,infect_ar,2
+mp_quarry,infect_ar,2
+mp_divide,infect_ar,2
+mp_desert,infect_ar,2
+mp_parkour,infect_ar,2
+mp_breakneck,infect_ar,2
+mp_rivet,infect_ar,2
+mp_fallen,infect_ar,2
+mp_dome_iw,infect_ar,2
+mp_skyway,infect_ar,2
+mp_afghan,infect_ar,2
+mp_prime,infect_ar,2
+mp_geneva,infect_ar,2
+mp_mansion,infect_ar,2
+mp_marsoasis,infect_ar,2
+mp_junk,infect_ar,2
+mp_flip,infect_ar,2
+mp_paris,infect_ar,1
+mp_pixel,infect_ar,1
+mp_overflow,infect_ar,1
+mp_nova,infect_ar,1
+mp_frontier,infect_smg,2
+mp_metropolis,infect_smg,2
+mp_proto,infect_smg,2
+mp_quarry,infect_smg,2
+mp_divide,infect_smg,2
+mp_desert,infect_smg,2
+mp_parkour,infect_smg,2
+mp_breakneck,infect_smg,2
+mp_rivet,infect_smg,2
+mp_fallen,infect_smg,2
+mp_dome_iw,infect_smg,2
+mp_skyway,infect_smg,2
+mp_afghan,infect_smg,2
+mp_prime,infect_smg,2
+mp_geneva,infect_smg,2
+mp_mansion,infect_smg,2
+mp_marsoasis,infect_smg,2
+mp_junk,infect_smg,2
+mp_flip,infect_smg,2
+mp_paris,infect_smg,2
+mp_pixel,infect_smg,2
+mp_overflow,infect_smg,2
+mp_nova,infect_smg,2
+mp_metropolis,infect_sniper,1
+mp_proto,infect_sniper,1
+mp_quarry,infect_sniper,1
+mp_divide,infect_sniper,1
+mp_desert,infect_sniper,1
+mp_parkour,infect_sniper,1
+mp_rivet,infect_sniper,1
+mp_fallen,infect_sniper,1
+mp_skyway,infect_sniper,1
+mp_afghan,infect_sniper,1
+mp_prime,infect_sniper,1
+mp_geneva,infect_sniper,1
+mp_mansion,infect_sniper,1
+mp_marsoasis,infect_sniper,1
+mp_junk,infect_sniper,1
+mp_flip,infect_sniper,1
+mp_frontier,infect_pistol,2
+mp_metropolis,infect_pistol,2
+mp_proto,infect_pistol,2
+mp_quarry,infect_pistol,2
+mp_divide,infect_pistol,2
+mp_desert,infect_pistol,2
+mp_parkour,infect_pistol,2
+mp_breakneck,infect_pistol,2
+mp_rivet,infect_pistol,2
+mp_fallen,infect_pistol,2
+mp_dome_iw,infect_pistol,2
+mp_skyway,infect_pistol,2
+mp_afghan,infect_pistol,2
+mp_prime,infect_pistol,2
+mp_geneva,infect_pistol,2
+mp_mansion,infect_pistol,2
+mp_marsoasis,infect_pistol,2
+mp_junk,infect_pistol,2
+mp_flip,infect_pistol,2
+mp_paris,infect_pistol,2
+mp_pixel,infect_pistol,2
+mp_overflow,infect_pistol,2
+mp_nova,infect_pistol,2
+mp_frontier,infect_supers,2
+mp_metropolis,infect_supers,2
+mp_proto,infect_supers,2
+mp_quarry,infect_supers,2
+mp_divide,infect_supers,2
+mp_desert,infect_supers,2
+mp_parkour,infect_supers,2
+mp_breakneck,infect_supers,2
+mp_rivet,infect_supers,2
+mp_fallen,infect_supers,2
+mp_dome_iw,infect_supers,2
+mp_skyway,infect_supers,2
+mp_afghan,infect_supers,2
+mp_prime,infect_supers,2
+mp_geneva,infect_supers,2
+mp_mansion,infect_supers,2
+mp_marsoasis,infect_supers,2
+playlist 17 // Ground War
+name PLAYLIST_GROUND_WAR_NAME
+description PLAYLIST_GROUND_WAR_DESC
+unlockxp 0
+maxparty 9
+rule party_minplayers 14
+rule party_maxplayers 18
+rule party_matchedplayercount 1
+image "gamemode_team_deathmatch"
+mp_proto,tdm,1
+mp_proto,dom,1
+mp_proto,front,1
+mp_proto,tdef,1
+mp_quarry,tdm,1
+mp_quarry,dom,1
+mp_quarry,front,1
+mp_quarry,tdef,1
+mp_divide,tdm,1
+mp_divide,dom,1
+mp_divide,front,1
+mp_divide,tdef,1
+mp_desert,tdm,1
+mp_desert,dom,1
+mp_desert,front,1
+mp_desert,tdef,1
+mp_parkour,tdm,1
+mp_parkour,dom,1
+mp_parkour,front,1
+mp_parkour,tdef,1
+mp_rivet,tdm,1
+mp_rivet,dom,1
+mp_rivet,front,1
+mp_rivet,tdef,1
+mp_fallen,tdm,1
+mp_fallen,dom,1
+mp_fallen,front,1
+mp_fallen,tdef,1
+mp_skyway,tdm,1
+mp_skyway,dom,1
+mp_skyway,front,1
+mp_skyway,tdef,1
+mp_neon,tdm,1
+mp_neon,tdef,1
+mp_neon,dom,1
+mp_neon,front,1
+mp_prime,tdm,1
+mp_prime,tdef,1
+mp_prime,dom,1
+mp_prime,front,1
+mp_afghan,tdm,1
+mp_afghan,tdef,1
+mp_afghan,dom,1
+mp_afghan,front,1
+playlist 18 // UPLINK COMPETITIVE
+name PLAYLIST_UPLINK_NAME
+description LUA_MENU_MP_UPLINK_DESC
+unlockxp 0
+maxparty 4
+rule party_minplayers 14
+rule party_maxplayers 8
+rule party_matchedplayercount 1
+image "gamemode_uplink"
+mp_proto,ball,1
+mp_parkour,ball,1
+mp_breakneck,ball,1
+mp_fallen,ball,1
+playlist 24 // CP_ZMB Zombie 
+name PLAYLIST_CP_ZMB_QA_NAME
+description PLAYLIST_CP_ZMB_DEVS_DESC
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+set online_matchmaking_dedi_required 0
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+image "icon_pl_extinction"
+cp_zmb,zombie,1
+playlist 35 // CP_ZMB Rave 
+name PLAYLIST_CP_RAVE_QA_NAME
+description PLAYLIST_CP_ZMB_DEVS_DESC
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 1
+set online_matchmaking_dedi_required 0
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+image "icon_pl_extinction"
+cp_rave,zombie,1
+playlist 38 // CP_ZMB Zombie 
+name PLAYLIST_CP_DISCO_QA_NAME
+description 
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 2
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+image "icon_pl_extinction"
+cp_disco,zombie,1
+playlist 39 // CP_ZMB Town 
+name PLAYLIST_ATTACK_NAME
+description 
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 3
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+image "icon_pl_extinction"
+cp_town,zombie,1
+playlist 40 // CP_ZMB Zombie 
+name LUA_MENU_ZM_CP_FINAL
+description 
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 4
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+image "icon_pl_extinction"
+cp_final,zombie,1
+playlist 19 // CP_ZMB Boss Mode
+name LUA_MENU_ZM_BOSS_SPACELAND
+description LUA_MENU_ZM_BOSS_SPACELAND
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+rule scr_direct_to_grey 1
+rule scr_boss_battles_enabled 1
+image "grey"
+cp_zmb,zombie,1
+playlist 23 // CP_ZMB Boss Mode
+name LUA_MENU_ZM_BOSS_RAVE 
+description LUA_MENU_ZM_BOSS_RAVE 
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 1
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+rule scr_direct_to_super_slasher 1
+rule scr_boss_battles_enabled 1
+image "superslasher"
+cp_rave,zombie,1
+playlist 29 // CP_ZMB Boss Mode
+name LUA_MENU_ZM_BOSS_DISCO 
+description LUA_MENU_ZM_BOSS_DISCO 
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 2
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+rule scr_direct_to_rat_king 1
+rule scr_boss_battles_enabled 1
+image "ratking"
+cp_disco,zombie,1
+playlist 36 // CP_ZMB Boss Mode
+name LUA_MENU_ZM_BOSS_TOWN  
+description LUA_MENU_ZM_BOSS_TOWN  
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 3
+set online_matchmaking_dedi_required 0
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+rule scr_direct_to_crab_boss 1
+rule scr_boss_battles_enabled 1
+image "crog"
+cp_town,zombie,1
+playlist 20 // CP_ZMB Boss Mode
+name LUA_MENU_ZM_BOSS_FINAL
+description LUA_MENU_ZM_BOSS_FINAL
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 4
+set online_matchmaking_dedi_required 0 
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+rule scr_direct_to_rhino_fight 1
+rule scr_boss_battles_enabled 1
+image "mammoth"
+cp_final,zombie,1
+playlist 33 // CP_ZMB Boss Mode
+name LUA_MENU_ZM_BOSS_DC
+description LUA_MENU_ZM_BOSS_DC  
+maxparty 4
+unlockxp 0
+rule party_matchedplayercount 1
+rule party_minplayers 14
+rule mming_minplayers_to_lobby 1
+rule party_maxplayers 4
+rule scr_default_maxagents 24
+rule allow_local_host_pause 1
+rule online_matchmaking_no_dedi_search 1
+dlc 4
+set online_matchmaking_dedi_required 0
+rule online_matchmaking_do_not_use_dlc_mming 0
+set online_acquire_ds_during_intermission 0
+rule scr_direct_to_meph_fight 1
+rule scr_boss_battles_enabled 1
+image "meph"
+cp_final,zombie,1
+playlist 11 // AON
+name PLAYLIST_AON_NAME
+description PLAYLIST_AON_DESC
+unlockxp 0
+maxparty 3
+rule party_minplayers 14
+rule party_maxplayers 10
+rule party_matchedplayercount 1
+rule cg_everyonehearseveryone 1
+rule killswitch_simultaneous_deaths 1
+image "gamemode_free_for_all"
+mp_frontier,aon,1
+mp_metropolis,aon,1
+mp_proto,aon,1
+mp_quarry,aon,1
+mp_divide,aon,1
+mp_desert,aon,1
+mp_breakneck,aon,1
+mp_riot,aon,1
+mp_rivet,aon,1
+mp_parkour,aon,1
+mp_dome_iw,aon,1
+mp_skyway,aon,1
+mp_fallen,aon,1
+mp_neon,aon,1
+mp_afghan,aon,1
+mp_geneva,aon,1
+mp_prime,aon,1
+mp_mansion,aon,1
+mp_marsoasis,aon,1
+mp_junk,aon,1
+mp_flip,aon,1
+mp_paris,aon,1
+mp_pixel,aon,1
+mp_overflow,aon,1
+mp_nova,aon,1
+playlist 32 // EPIC GUN GAME
+name PLAYLIST_GUN_NAME_EPIC
+description LUA_MENU_MP_GUN_DESC
+unlockxp 0
+maxparty 4
+rule party_minplayers 14
+rule party_maxplayers 10
+rule party_matchedplayercount 1
+image "gamemode_gun_game"
+mp_frontier,gun_epic,1
+mp_metropolis,gun_epic,1
+mp_proto,gun_epic,1
+mp_quarry,gun_epic,1
+mp_divide,gun_epic,1
+mp_desert,gun_epic,1
+mp_riot,gun_epic,1
+mp_parkour,gun_epic,1
+mp_breakneck,gun_epic,1
+mp_rivet,gun_epic,1
+mp_fallen,gun_epic,1
+mp_dome_iw,gun_epic,1
+mp_skyway,gun_epic,1
+mp_neon,gun_epic,1
+mp_afghan,gun_epic,1
+mp_geneva,gun_epic,1
+mp_prime,gun_epic,1
+mp_mansion,gun_epic,1
+mp_marsoasis,gun_epic,1
+mp_junk,gun_epic,1
+mp_flip,gun_epic,1
+mp_paris,gun_epic,1
+mp_pixel,gun_epic,1
+mp_overflow,gun_epic,1
+mp_nova,gun_epic,1
+playlist 27 // Tactical Movement Test
+name PLAYLIST_TAC_MOSHPIT
+description PLAYLIST_TAC_MOSHPIT_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule scr_conf_scorelimit 65
+set jump_slowdownEnable 1
+set scr_player_maxhealth 70
+set sprintLeap_enabled 0
+set scr_tactical 1
+image "gamemode_tdm_hardcore"
+mp_frontier,tdm,1
+mp_fallen,tdm,1
+mp_proto,tdm,1
+mp_quarry,tdm,1
+mp_skyway,tdm,1
+mp_metropolis,tdm,1
+mp_desert,tdm,1
+mp_dome_iw,tdm,1
+mp_riot,tdm,1
+mp_parkour,tdm,1
+mp_rivet,tdm,1
+mp_breakneck,tdm,1
+mp_skyway,tdm,1
+mp_frontier,conf_tdm,1
+mp_fallen,conf_tdm,1
+mp_proto,conf_tdm,1
+mp_quarry,conf_tdm,1
+mp_skyway,conf_tdm,1
+mp_metropolis,conf_tdm,1
+mp_desert,conf_tdm,1
+mp_dome_iw,conf_tdm,1
+mp_riot,conf_tdm,1
+mp_parkour,conf_tdm,1
+mp_rivet,conf_tdm,1
+mp_breakneck,conf_tdm,1
+mp_skyway,conf_tdm,1
+mp_frontier,dom,1
+mp_fallen,dom,1
+mp_proto,dom,1
+mp_quarry,dom,1
+mp_skyway,dom,1
+mp_metropolis,dom,1
+mp_desert,dom,1
+mp_dome_iw,dom,1
+mp_riot,dom,1
+mp_parkour,dom,1
+mp_rivet,dom,1
+mp_breakneck,dom,1
+mp_skyway,dom,1
+mp_neon,tdm,1
+mp_afghan,tdm,1
+mp_geneva,tdm,1
+mp_prime,tdm,1
+mp_mansion,tdm,1
+mp_marsoasis,tdm,1
+mp_junk,tdm,1
+mp_flip,tdm,1
+mp_neon,conf_tdm,1
+mp_afghan,conf_tdm,1
+mp_geneva,conf_tdm,1
+mp_prime,conf_tdm,1
+mp_mansion,conf_tdm,1
+mp_marsoasis,conf_tdm,1
+mp_junk,conf_tdm,1
+mp_flip,conf_tdm,1
+mp_neon,dom,1
+mp_afghan,dom,1
+mp_geneva,dom,1
+mp_prime,dom,1
+mp_mansion,dom,1
+mp_marsoasis,dom,1
+mp_junk,dom,1
+mp_flip,dom,1
+mp_paris,tdm,1
+mp_pixel,tdm,1
+
+playlist 10 // Cranked
+name PLAYLIST_CRANKED_NAME
+description PLAYLIST_CRANKED_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_cranked"
+mp_frontier,cranked,1
+mp_metropolis,cranked,1
+mp_proto,cranked,1
+mp_quarry,cranked,1
+mp_divide,cranked,1
+mp_desert,cranked,1
+mp_parkour,cranked,1
+mp_riot,cranked,1
+mp_fallen,cranked,1
+mp_rivet,cranked,1
+mp_breakneck,cranked,1
+mp_skyway,cranked,1
+mp_neon,cranked,1
+mp_afghan,cranked,1
+mp_geneva,cranked,1
+mp_prime,cranked,1
+mp_mansion,cranked,1
+mp_marsoasis,cranked,1
+mp_junk,cranked,1
+mp_flip,cranked,1
+mp_paris,cranked,1
+mp_pixel,cranked,1
+mp_overflow,cranked,1
+mp_nova,cranked,1
+playlist 30 // DEMOLITION
+name PLAYLIST_DEMO_NAME
+description LUA_MENU_MP_DEMOLITION_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_demolition"
+mp_frontier,dd,1
+mp_metropolis,dd,1
+mp_proto,dd,1
+mp_quarry,dd,1
+mp_divide,dd,1
+mp_desert,dd,1
+mp_parkour,dd,1
+mp_riot,dd,1
+mp_fallen,dd,1
+mp_rivet,dd,1
+mp_breakneck,dd,1
+mp_neon,dd,1
+mp_afghan,dd,1
+mp_geneva,dd,1
+mp_prime,dd,1
+mp_mansion,dd,1
+mp_marsoasis,dd,1
+mp_junk,dd,1
+mp_flip,dd,1
+mp_paris,dd,1
+mp_pixel,dd,1
+mp_overflow,dd,1
+mp_nova,dd,1
+playlist 31 // HYPER TEAM DEATHMATCH
+name PLAYLIST_TDM_HYPER_NAME
+description PLAYLIST_TDM_HYPER_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_team_deathmatch"
+mp_frontier,hyper_tdm,1
+mp_metropolis,hyper_tdm,1
+mp_proto,hyper_tdm,1
+mp_quarry,hyper_tdm,1
+mp_divide,hyper_tdm,1
+mp_desert,hyper_tdm,1
+mp_riot,hyper_tdm,1
+mp_parkour,hyper_tdm,1
+mp_breakneck,hyper_tdm,1
+mp_rivet,hyper_tdm,1
+mp_fallen,hyper_tdm,1
+mp_dome_iw,hyper_tdm,1
+mp_skyway,hyper_tdm,1
+mp_neon,hyper_tdm,1
+mp_afghan,hyper_tdm,1
+mp_geneva,hyper_tdm,1
+mp_prime,hyper_tdm,1
+mp_mansion,hyper_tdm,1
+mp_marsoasis,hyper_tdm,1
+mp_junk,hyper_tdm,1
+mp_flip,hyper_tdm,1
+mp_paris,hyper_tdm,1
+mp_pixel,hyper_tdm,1
+mp_overflow,hyper_tdm,1
+mp_nova,hyper_tdm,1
+playlist 8 // SR + Reinforce
+name PLAYLIST_R_AND_R_MOSHPIT
+description PLAYLIST_R_AND_R_MOSHPIT_DESC
+unlockxp 0
+maxparty 4
+rule party_minplayers 14
+rule party_maxplayers 8
+rule party_matchedplayercount 1
+image "gamemode_reinforce"
+mp_frontier,sr,1
+mp_metropolis,sr,1
+mp_proto,sr,1
+mp_quarry,sr,1
+mp_divide,sr,1
+mp_desert,sr,1
+mp_parkour,sr,1
+mp_riot,sr,1
+mp_fallen,sr,1
+mp_rivet,sr,1
+mp_breakneck,sr,1
+mp_skyway,sr,1
+mp_dome_iw,sr,1
+mp_neon,sr,1
+mp_afghan,sr,1
+mp_geneva,sr,1
+mp_prime,sr,1
+mp_mansion,sr,1
+mp_marsoasis,sr,1
+mp_junk,sr,1
+mp_flip,sr,1
+mp_paris,sr,1
+mp_pixel,sr,1
+mp_overflow,sr,1
+mp_nova,sr,1
+mp_frontier,siege,1
+mp_metropolis,siege,1
+mp_proto,siege,1
+mp_quarry,siege,1
+mp_divide,siege,1
+mp_desert,siege,1
+mp_parkour,siege,1
+mp_riot,siege,1
+mp_fallen,siege,1
+mp_rivet,siege,1
+mp_breakneck,siege,1
+mp_skyway,siege,1
+mp_dome_iw,siege,1
+mp_neon,siege,1
+mp_afghan,siege,1
+mp_geneva,siege,1
+mp_prime,siege,1
+mp_mansion,siege,1
+mp_marsoasis,siege,1
+mp_junk,siege,1
+mp_flip,siege,1
+mp_paris,siege,1
+mp_pixel,siege,1
+mp_overflow,siege,1
+mp_nova,siege,1
+playlist 37 // Mayhem
+name PLAYLIST_MAYHEM
+description PLAYLIST_MAYHEM_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule scr_game_casualScoreStreaks 1
+image "gamemode_mayhem"
+mp_frontier,tdm,1
+mp_metropolis,tdm,1
+mp_proto,tdm,1
+mp_quarry,tdm,1
+mp_divide,tdm,1
+mp_desert,tdm,1
+mp_riot,tdm,1
+mp_parkour,tdm,1
+mp_breakneck,tdm,1
+mp_rivet,tdm,1
+mp_fallen,tdm,1
+mp_dome_iw,tdm,1
+mp_skyway,tdm,1
+mp_neon,tdm,1
+mp_afghan,tdm,1
+mp_geneva,tdm,1
+mp_prime,tdm,1
+mp_mansion,tdm,1
+mp_marsoasis,tdm,1
+mp_junk,tdm,1
+mp_flip,tdm,1
+mp_paris,tdm,1
+mp_pixel,tdm,1
+mp_overflow,tdm,1
+mp_nova,tdm,1
+playlist 21 // Gesture
+name PLAYLIST_GESTURE_NAME
+description PLAYLIST_GESTURE_DESC
+unlockxp 0
+maxparty 4
+rule party_minplayers 14
+rule party_maxplayers 10
+rule party_matchedplayercount 1
+rule cg_everyonehearseveryone 1
+image "gamemode_gesture_mode"
+mp_frontier,gesture,1
+mp_metropolis,gesture,1
+mp_proto,gesture,1
+mp_quarry,gesture,1
+mp_divide,gesture,1
+mp_desert,gesture,1
+mp_breakneck,gesture,1
+mp_riot,gesture,1
+mp_rivet,gesture,1
+mp_parkour,gesture,1
+mp_dome_iw,gesture,1
+mp_skyway,gesture,1
+mp_neon,gesture,1
+mp_afghan,gesture,1
+
+playlist 22 // DLC TDM
+name PLAYLIST_DLCALL_TDM_NAME
+description PLAYLIST_DLCALL_TDM_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule online_matchmaking_do_not_use_dlc_mming 0
+dlc 1
+dlc 2
+dlc 3
+dlc 4
+image "gamemode_team_deathmatch"
+mp_neon,tdm,1
+mp_afghan,tdm,1
+mp_geneva,tdm,1
+mp_prime,tdm,1
+mp_marsoasis,tdm,1
+mp_flip,tdm,1
+mp_junk,tdm,1
+mp_mansion,tdm,1
+mp_nova,tdm,1
+mp_paris,tdm,1
+mp_pixel,tdm,1
+mp_overflow,tdm,1
+mp_rally,tdm,1
+mp_hawkwar,tdm,1
+mp_codphish,tdm,1
+mp_depot,tdm,1
+playlist 34 // DLC 4 TDM
+name PLAYLIST_DLCALL_MOSHPIT_HC_NAME
+description PLAYLIST_DLCALL_MOSHPIT_HC_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule online_matchmaking_do_not_use_dlc_mming 0
+dlc 1
+dlc 2
+dlc 3
+dlc 4
+image "gamemode_team_deathmatch"
+mp_marsoasis,hc_conf_tdm,1
+mp_flip,hc_conf_tdm,1
+mp_junk,hc_conf_tdm,1
+mp_mansion,hc_conf_tdm,1
+mp_nova,hc_conf_tdm,1
+mp_paris,hc_conf_tdm,1
+mp_pixel,hc_conf_tdm,1
+mp_overflow,hc_conf_tdm,1
+mp_rally,hc_conf_tdm,1
+mp_hawkwar,hc_conf_tdm,1
+mp_codphish,hc_conf_tdm,1
+mp_depot,hc_conf_tdm,1
+mp_neon,hc_dom,1
+mp_afghan,hc_dom,1
+mp_geneva,hc_dom,1
+mp_prime,hc_dom,1
+mp_marsoasis,hc_dom,1
+mp_flip,hc_dom,1
+mp_junk,hc_dom,1
+mp_mansion,hc_dom,1
+mp_nova,hc_dom,1
+mp_paris,hc_dom,1
+mp_pixel,hc_dom,1
+mp_overflow,hc_dom,1
+mp_rally,hc_dom,1
+mp_hawkwar,hc_dom,1
+mp_codphish,hc_dom,1
+mp_depot,hc_dom,1
+playlist 15 // DLC 3 TDM
+name PLAYLIST_DLCALL_MOSHPIT_NAME
+description PLAYLIST_DLCALL_MOSHPIT_DESC
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule online_matchmaking_do_not_use_dlc_mming 0
+dlc 1
+dlc 2
+dlc 3
+dlc 4
+image "gamemode_team_deathmatch"
+mp_neon,front,1
+mp_afghan,front,1
+mp_geneva,front,1
+mp_prime,front,1
+mp_marsoasis,front,1
+mp_flip,front,1
+mp_junk,front,1
+
+playlist 6
+name "#FREE Renaissance & Turista"
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule online_matchmaking_do_not_use_dlc_mming 0
+image "gamemode_team_deathmatch"
+mp_renaissance2,tdm,1
+mp_turista2,tdm,1
+mp_renaissance2,dom,1
+mp_turista2,dom,1
+mp_renaissance2,conf_tdm,1
+mp_turista2,conf_tdm,1
+playlist 28
+name "#FREE Permafrost & Carnage"
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+rule online_matchmaking_do_not_use_dlc_mming 0
+image "gamemode_team_deathmatch"
+mp_permafrost2,tdm,1
+mp_carnage2,dom,1
+
+playlist 12 // KILL CONFIRMED
+name PLAYLIST_CONF_NAME
+description MENU_KILL_PLAYERS_ON_OPPOSING_TEAMS
+unlockxp 0
+maxparty 6
+rule party_minplayers 14
+rule party_maxplayers 12
+rule party_matchedplayercount 1
+image "gamemode_kill_confirmed"
+mp_frontier,conf_tdm,1
+mp_metropolis,conf_tdm,1
+mp_proto,conf_tdm,1
+mp_quarry,conf_tdm,1
+mp_divide,conf_tdm,1
+mp_desert,conf_tdm,1
+mp_riot,conf_tdm,1
+mp_parkour,conf_tdm,1
+mp_breakneck,conf_tdm,1
+mp_rivet,conf_tdm,1
+mp_fallen,conf_tdm,1
+mp_dome_iw,conf_tdm,1
+category TOP
+categoryclass ALL
+include A, B, C, D, E
+name PLAYLIST_PLAYER_MATCH_NAME
+category A
+categoryclass CORE
+name "#DLC"
+description "#DLC"
+include 22, 34, 15
+image "icon_pl_clan"
+category B
+categoryclass CORE
+name LUA_MENU_MP_FEATURED
+featured
+description LUA_MENU_MP_FEATURED
+include 27, 21, 10
+image "icon_pl_advanced"
+category C
+categoryclass CORE
+name PLAYLIST_STANDARD_NAME
+description PLAYLIST_STANDARD_NAME
+include 1, 12, 2, 3, 7, 8, 14, 16, 17
+image "icon_pl_advanced"
+category D
+categoryclass CORE
+name PLAYLIST_HARDCORE_NAME
+description PLAYLIST_HARDCORE_NAME
+include 9
+image "icon_pl_advanced"
+category E
+categoryclass ALIENS
+name PLAYLIST_ZOMBIES_NAME
+description PLAYLIST_ZOMBIES_DESC
+include 24, 35, 38, 39, 40, 19, 23, 29, 36, 20, 33
+image "icon_pl_extinction"

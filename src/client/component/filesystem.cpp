@@ -10,7 +10,6 @@
 #include <utils/hook.hpp>
 #include <utils/string.hpp>
 #include <utils/io.hpp>
-#include <utils/properties.hpp>
 
 namespace filesystem
 {
@@ -29,7 +28,7 @@ namespace filesystem
 		{
 			if (!_stricmp(game, "players2"))
 			{
-				const auto path = "iw7-mod/"s + game;
+				const auto path = "iw7s/"s + game;
 				fs_build_os_path_hook.invoke<void>(base, path.data(), qpath, ospath);
 				return;
 			}
@@ -41,7 +40,7 @@ namespace filesystem
 		{
 			// the game opens players2\upshd.dat relative to the cwd, bypassing the players2 redirect above
 			static const auto* fs_basepath = game::Dvar_FindVar("fs_basepath");
-			const auto dir = std::filesystem::path(fs_basepath->current.string) / "iw7-mod" / "players2";
+			const auto dir = std::filesystem::path(fs_basepath->current.string) / "iw7s" / "players2";
 			utils::io::create_directory(dir.string());
 
 			const auto path = (dir / std::filesystem::path(src).filename()).string();
@@ -76,8 +75,7 @@ namespace filesystem
 
 			initialized = true;
 
-			filesystem::register_path(utils::properties::get_appdata_path() / "cdata"); // CLIENT_DATA_FOLDER
-			filesystem::register_path(sys_default_install_path_stub() + "/"s + "iw7-mod"s);
+			filesystem::register_path(sys_default_install_path_stub() + "/"s + "iw7s"s);
 
 			fs_startup_hook.invoke<void>(name);
 

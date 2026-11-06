@@ -1,6 +1,6 @@
 #include <std_include.hpp>
 
-#ifdef _DEBUG
+#if 1 // comandos de volcado (gscDump, luaDump...) también en Release
 #include "loader/component_loader.hpp"
 #include "game/game.hpp"
 #include "command.hpp"
@@ -191,7 +191,7 @@ namespace dump
 			}
 		}
 
-		auto finalFilename = utils::string::va("iw7-mod/dump/stringtables/%s", stringTable->name);
+		auto finalFilename = utils::string::va("iw7s/dump/stringtables/%s", stringTable->name);
 		utils::io::write_file(finalFilename, buffer);
 		console::info("Dumped %s (%d bytes)\n", finalFilename, buffer.length());
 	}
@@ -245,7 +245,7 @@ namespace dump
 							}
 						}
 
-						DumpScriptFile(utils::string::va("iw7-mod/dump/gsc/%s.gsc", filename.c_str()), asset);
+						DumpScriptFile(utils::string::va("iw7s/dump/gsc/%s.gsc", filename.c_str()), asset);
 					}
 				});
 			});
@@ -257,7 +257,7 @@ namespace dump
 					if (const auto asset = header.luaFile; asset != nullptr)
 					{
 						const std::string filename = utils::string::to_lower(asset->name);
-						DumpLuaFile(utils::string::va("iw7-mod/dump/lua/%s", filename.c_str()), asset);
+						DumpLuaFile(utils::string::va("iw7s/dump/lua/%s", filename.c_str()), asset);
 					}
 				});
 			});
@@ -289,7 +289,7 @@ namespace dump
 					}
 				});
 
-				utils::io::write_file("iw7-mod/dump/localize.csv", buffer);
+				utils::io::write_file("iw7s/dump/localize.csv", buffer);
 				console::info("dumped %d localized strings\n", count);
 			});
 
@@ -302,7 +302,7 @@ namespace dump
 					if (cmd->name)
 					{
 						const auto line = std::format("{}\r\n", cmd->name);
-						utils::io::write_file("iw7-mod/dump/commandlist.txt", line, i != 0);
+						utils::io::write_file("iw7s/dump/commandlist.txt", line, i != 0);
 						i++;
 					}
 					cmd = cmd->next;
@@ -321,7 +321,7 @@ namespace dump
 						name = utils::string::replace(name, "maps/cp/", "");
 						name = utils::string::replace(name, "maps/", "");
 						name = utils::string::replace(name, ".d3dbsp", "");
-						DumpMapEnts(utils::string::va("iw7-mod/dump/mapents/%s.txt", name.c_str()), asset);
+						DumpMapEnts(utils::string::va("iw7s/dump/mapents/%s.txt", name.c_str()), asset);
 					}
 				});
 			});

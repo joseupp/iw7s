@@ -19,7 +19,8 @@ namespace demonware
 
 		static std::string data;
 
-		if (!utils::io::read_file(std::filesystem::current_path().string() + "/"s + "iw7-mod"s + "publisher_variables.json", &data))
+		// iw7s/dw/publisher_variables.json si existe; si no, la del ejecutable
+		if (!utils::io::read_file("iw7s/dw/publisher_variables.json", &data))
 		{
 			data = utils::nt::load_resource(DW_PUBVARS);
 		}

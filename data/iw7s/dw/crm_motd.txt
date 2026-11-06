@@ -1,0 +1,6 @@
+title=IW7S
+short=Bienvenido a ^3IW7S
+long=Bienvenido a ^3IW7S^7.\n\nCliente sin conexión de Infinite Warfare.
+image=image_motd_mp_dlc4_keyart_v1
+layout=1
+popup=1

@@ -5,4 +5,5 @@ namespace steam_proxy
 {
 	const utils::nt::library& get_overlay_module();
 	void initialize();
+	bool is_steam_running();
 }

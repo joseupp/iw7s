@@ -13,6 +13,7 @@
 
 ID3D11Device* dx::device = nullptr;
 ID3D11DeviceContext* dx::deviceContext = nullptr;
+ID3D11Multithread* dx::multithread = nullptr;
 ID3D12Device* dx::d3d12Device = nullptr;
 ID3D12CommandQueue* dx::d3d12CommandQueue = nullptr;
 
@@ -37,6 +38,11 @@ namespace dx
 			{
 				dx::device = *out_device;
 				dx::deviceContext = *out_context;
+
+				// Para usar el contexto inmediato fuera del hilo de render (images_dump): la protección solo se activa
+				// mientras dura el volcado, para no perder rendimiento
+				dx::multithread = nullptr;
+				(*out_context)->QueryInterface(IID_PPV_ARGS(&dx::multithread));
 			}
 		}
 

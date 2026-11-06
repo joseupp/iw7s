@@ -43,4 +43,4 @@ namespace intro
 	};
 }
 
-REGISTER_COMPONENT(intro::component)
+REGISTER_COMPONENT(intro::component)

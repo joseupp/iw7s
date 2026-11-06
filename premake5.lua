@@ -36,6 +36,19 @@ function vertonumarr(value, vernumber, partscount)
     return vernum
 end
 
+-- Número de revisión propio (r1000, r1001...): se lee de revision.txt y se sube a mano en cada cambio.
+-- Las letras detrás del número son la fase (b = beta): "1000b" -> r1000b
+function readrevision()
+    local file = io.open(path.join(_MAIN_SCRIPT_DIR, "revision.txt"), "r")
+    if file == nil then
+        return 1000, ""
+    end
+    local content = file:read("*a") or ""
+    file:close()
+    local number, suffix = string.match(content, "(%d+)(%a*)")
+    return tonumber(number) or 1000, suffix or ""
+end
+
 dependencies = {
     basePath = "./deps"
 }
@@ -113,6 +126,7 @@ newaction {
     onWorkspace = function(wks)
         -- get old version number from version.hpp if any
         local oldVersion = "(none)"
+        local oldRevision = "(none)"
         local oldVersionHeader = io.open(wks.location .. "/src/version.h", "r")
         if oldVersionHeader ~= nil then
             local oldVersionHeaderContent = assert(oldVersionHeader:read('*l'))
@@ -120,6 +134,11 @@ newaction {
                 m = string.match(oldVersionHeaderContent, "#define GIT_DESCRIBE (.+)%s*$")
                 if m ~= nil then
                     oldVersion = m
+                end
+
+                m = string.match(oldVersionHeaderContent, "#define REVISION_STRING \"(.-)\"")
+                if m ~= nil then
+                    oldRevision = m
                 end
 
                 oldVersionHeaderContent = oldVersionHeader:read('*l')
@@ -133,9 +152,10 @@ newaction {
 
         -- generate version.hpp with a revision number if not equal
         gitDescribeOutputQuoted = cstrquote(gitDescribeOutput)
-        if oldVersion ~= gitDescribeOutputQuoted then
-            -- get current git hash and write to version.txt (used by the preliminary updater)
-            -- TODO - remove once proper updater and release versioning exists
+        local revision, revisionSuffix = readrevision()
+        local revisionString = "r" .. revision .. revisionSuffix
+        if oldVersion ~= gitDescribeOutputQuoted or oldRevision ~= revisionString then
+            -- get current git hash
             local proc = assert(io.popen("git rev-parse HEAD", "r"))
             local gitCommitHash = assert(proc:read('*a')):gsub("%s+", "")
             proc:close()
@@ -178,13 +198,7 @@ newaction {
             local proc = assert(io.popen("git rev-list --count HEAD", "r"))
             local revNumber = assert(proc:read('*a')):gsub("%s+", "")
 
-            print("Update " .. oldVersion .. " -> " .. gitDescribeOutputQuoted)
-
-            -- write to version.txt for preliminary updater
-            -- NOTE - remove this once we have a proper updater and proper release versioning
-            local versionFile = assert(io.open(wks.location .. "/version.txt", "w"))
-            versionFile:write(gitCommitHash)
-            versionFile:close()
+            print("Update " .. oldVersion .. " -> " .. gitDescribeOutputQuoted .. " (" .. revisionString .. ")")
 
             -- write version header
             local versionHeader = assert(io.open(wks.location .. "/src/version.h", "w"))
@@ -199,19 +213,19 @@ newaction {
             versionHeader:write("#define GIT_TAG " .. cstrquote(tagName) .. "\n")
             versionHeader:write("#define GIT_BRANCH " .. cstrquote(branchName) .. "\n")
             versionHeader:write("\n")
+            versionHeader:write("// Revision number (revision.txt)\n")
+            versionHeader:write("#define REVISION " .. revision .. "\n")
+            versionHeader:write("#define REVISION_STRING " .. cstrquote(revisionString) .. "\n")
+            versionHeader:write("\n")
             versionHeader:write("// Version transformed for RC files\n")
-            versionHeader:write(
-                "#define VERSION_PRODUCT_RC " .. table.concat(vertonumarr(tagName, revNumber, 3), ",") .. "\n")
-            versionHeader:write("#define VERSION_PRODUCT " ..
-                                    cstrquote(table.concat(vertonumarr(tagName, revNumber, 3), ".")) .. "\n")
-            versionHeader:write("#define VERSION_FILE_RC " .. table.concat(vertonumarr(tagName, revNumber, 4), ",") ..
-                                    "\n")
-            versionHeader:write("#define VERSION_FILE " ..
-                                    cstrquote(table.concat(vertonumarr(tagName, revNumber, 4), ".")) .. "\n")
+            versionHeader:write("#define VERSION_PRODUCT_RC " .. revision .. ",0,0,0\n")
+            versionHeader:write("#define VERSION_PRODUCT REVISION_STRING\n")
+            versionHeader:write("#define VERSION_FILE_RC " .. revision .. ",0,0,0\n")
+            versionHeader:write("#define VERSION_FILE REVISION_STRING\n")
             versionHeader:write("\n")
             versionHeader:write("// Alias definitions\n")
-            versionHeader:write("#define VERSION GIT_DESCRIBE\n")
-            versionHeader:write("#define SHORTVERSION VERSION_PRODUCT\n")
+            versionHeader:write("#define VERSION REVISION_STRING\n")
+            versionHeader:write("#define SHORTVERSION REVISION_STRING\n")
             versionHeader:close()
             local versionHeader = assert(io.open(wks.location .. "/src/version.hpp", "w"))
             versionHeader:write("/*\n")
@@ -233,7 +247,7 @@ newaction {
 
 dependencies.load()
 
-workspace "iw7-mod"
+workspace "iw7s"
 startproject "client"
 location "./build"
 objdir "%{wks.location}/obj"
@@ -297,10 +311,12 @@ resincludedirs {"$(ProjectDir)src"}
 dependencies.imports()
 
 project "client"
-kind "ConsoleApp"
+-- Aplicación de ventana: sin la ventana de consola de Windows al arrancar (cliente offline, sin servidor dedicado)
+kind "WindowedApp"
+entrypoint "mainCRTStartup"
 language "C++"
 
-targetname "iw7-mod"
+targetname "iw7s"
 
 pchheader "std_include.hpp"
 pchsource "src/client/std_include.cpp"
@@ -337,7 +353,7 @@ end
 if os.getenv("AURORAIW7_GAME_PATH") then
     debugdir "$(AURORAIW7_GAME_PATH)"
     debugcommand "$(AURORAIW7_GAME_PATH)\\$(TargetName)$(TargetExt)"
-    postbuildcommands {"echo Copying to Aurora iw7-mod game path...",
+    postbuildcommands {"echo Copying to Aurora iw7s game path...",
                        "copy /y \"$(OutDir)$(TargetName)$(TargetExt)\" \"$(AURORAIW7_GAME_PATH)\\$(TargetName)$(TargetExt)\""}
 end
 
@@ -358,6 +374,15 @@ includedirs {"./src/tlsdll", "%{prj.location}/src"}
 links {"common"}
 
 resincludedirs {"$(ProjectDir)src"}
+
+-- Herramienta: PNG -> DDS con el formato de las texturas de IW7 (para iw7s\images, images.cpp)
+project "png2dds"
+kind "ConsoleApp"
+language "C++"
+
+files {"./src/png2dds/**.cpp"}
+
+directxtex.import()
 
 group "Dependencies"
 dependencies.projects()

@@ -6,7 +6,6 @@
 
 #include "game/game.hpp"
 
-#include "component/rcon.hpp"
 
 #include "version.h"
 
@@ -317,11 +316,6 @@ namespace terminal
 
 	int dispatch_message(const int type, const std::string& message)
 	{
-		if (rcon::message_redirect(message))
-		{
-			return 0;
-		}
-
 		std::lock_guard _0(print_mutex);
 
 		clear_output();
@@ -354,7 +348,7 @@ namespace terminal
 		void post_unpack() override
 		{
 			ShowWindow(GetConsoleWindow(), SW_SHOW);
-			SetConsoleTitle("IW7-Mod: " VERSION);
+			SetConsoleTitle("IW7S: " VERSION);
 
 			con.kill_event = CreateEvent(NULL, TRUE, FALSE, NULL);
 

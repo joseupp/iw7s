@@ -68,7 +68,7 @@ namespace dvar_cheats
 				return false;
 			}
 
-			if ((dvar->flags & game::DvarFlags::DVAR_FLAG_CHEAT) && (!game::shared::cheats_ok() && *game::isCheatOverride))
+			if ((dvar->flags & game::DvarFlags::DVAR_FLAG_CHEAT) && (!game::shared::cheats_ok() && *game::isCheatOverride) && !sv_running)
 			{
 				if (!silent)
 					console::error("%s is cheat protected\n", dvars::dvar_get_name(dvar).data());

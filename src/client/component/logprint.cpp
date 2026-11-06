@@ -247,7 +247,7 @@ namespace logprint
 			{
 				dvars::logfile = game::Dvar_RegisterBool("logfile", true, game::DVAR_FLAG_NONE, "Enable game logging");
 				dvars::dlog_enabled = game::Dvar_RegisterBool("dlog_enabled", false, game::DVAR_FLAG_NONE, "Enable DLOG");
-				dvars::g_log = game::Dvar_RegisterString("g_log", "iw7-mod\\logs\\games_mp.log", game::DVAR_FLAG_NONE, "Log file path");
+				dvars::g_log = game::Dvar_RegisterString("g_log", "iw7s\\logs\\games_mp.log", game::DVAR_FLAG_NONE, "Log file path");
 			}, scheduler::pipeline::main);
 
 			// Hook say client command

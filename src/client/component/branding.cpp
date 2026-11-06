@@ -22,7 +22,7 @@ namespace branding
 			static bool once = ([]()
 			{
 				const char* build_num = ui_get_formatted_build_number_hook.invoke<const char*>();
-				utils::string::copy(buf, utils::string::va("%s (%s)", VERSION, build_num));
+				utils::string::copy(buf, utils::string::va("%s (%s)", SHORTVERSION, build_num));
 				return true;
 			})();
 
@@ -40,12 +40,12 @@ namespace branding
 				return;
 			}
 
-			localized_strings::override("LUA_MENU_LEGAL_COPYRIGHT", "IW7-MOD");
-			localized_strings::override("LUA_MENU_MP_DAILY_LOGIN_MESSAGE", "Thank you for playing IW7-Mod!\nLog in every day to receive better and better rewards.");
+			//localized_strings::override("LUA_MENU_LEGAL_COPYRIGHT", "IW7S");
+			//localized_strings::override("LUA_MENU_MP_DAILY_LOGIN_MESSAGE", "Thank you for playing IW7S!\nLog in every day to receive better and better rewards.");
 
-			//localized_strings::override("MENU_SP_CAMPAIGN", "IW7-MOD: CAMPAIGN");
-			//localized_strings::override("LUA_MENU_MULTIPLAYER_CAPS", "IW7-MOD: MULTIPLAYER");
-			//localized_strings::override("LUA_MENU_ALIENS_CAPS", "IW7-MOD: ZOMBIES");
+			//localized_strings::override("MENU_SP_CAMPAIGN", "IW7S: CAMPAIGN");
+			//localized_strings::override("LUA_MENU_MULTIPLAYER_CAPS", "IW7S: MULTIPLAYER");
+			//localized_strings::override("LUA_MENU_ALIENS_CAPS", "IW7S: ZOMBIES");
 
 			scheduler::once([]()
 			{
@@ -54,7 +54,7 @@ namespace branding
 
 #if GIT_DIRTY == 1
 			static char version_buffer[0x100]{};
-			sprintf_s(version_buffer, sizeof(version_buffer), "%s %s build %s %s %s", BUILD_NAME, VERSION, __DATE__, __TIME__, TARGET_ARCHITECTURE);
+			sprintf_s(version_buffer, sizeof(version_buffer), "%s %s build %s %s %s", BUILD_NAME, SHORTVERSION, __DATE__, __TIME__, TARGET_ARCHITECTURE);
 #endif
 
 			scheduler::loop([]()
@@ -80,7 +80,7 @@ namespace branding
 					if (!font) return;
 
 					static float text_color[4] = { 0.860f, 0.459f, 0.925f, 0.400f };
-					game::R_AddCmdDrawText("iw7-mod: " VERSION, std::numeric_limits<int>::max(), font, 10.f,
+					game::R_AddCmdDrawText("iw7s: " VERSION, std::numeric_limits<int>::max(), font, 10.f,
 						5.f + static_cast<float>(font->pixelHeight), 1.f, 1.f, 0.0f, text_color, 0);
 #endif
 				}

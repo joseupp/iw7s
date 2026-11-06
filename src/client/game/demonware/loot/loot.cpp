@@ -10,7 +10,7 @@ namespace demonware
 {
 	namespace loot
 	{
-		const std::string& json_data_path = "iw7-mod/players2/user/loot/loot.json";
+		const std::string& json_data_path = "iw7s/players2/user/loot/loot.json";
 		nlohmann::json json_buffer;
 
 		namespace csv

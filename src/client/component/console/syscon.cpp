@@ -211,8 +211,8 @@ namespace syscon
 		int swidth, sheight;
 		DWORD DEDSTYLE = WS_POPUPWINDOW | WS_CAPTION | WS_MINIMIZEBOX;
 
-		const char* class_name = "IW7-Mod WinConsole";
-		const char* window_name = "IW7-Mod Console";
+		const char* class_name = "IW7S WinConsole";
+		const char* window_name = "IW7S Console";
 
 		memset(&rect, 0, sizeof(rect));
 		memset(&wndclass, 0, sizeof(rect));

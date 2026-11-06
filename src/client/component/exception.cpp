@@ -27,6 +27,35 @@ namespace exception
 			PVOID address = nullptr;
 		} exception_data;
 
+		// Error fatal "exceeded maximum number of script strings" al salir del juego (comando quit, 0x140BADE9E llama
+		// al apagado 0x140342C20): las zonas se descargan cuando ya no quedan cadenas de script libres. El juego se
+		// esta cerrando igualmente: se sale sin ventana de error.
+		utils::hook::detour fatal_error_hook;
+
+		void fatal_error_stub(const char* fmt, ...)
+		{
+			char message[1024]{};
+			va_list ap;
+			va_start(ap, fmt);
+			vsnprintf_s(message, _TRUNCATE, fmt ? fmt : "", ap);
+			va_end(ap);
+
+			if (std::strstr(message, "script strings"))
+			{
+				void* frames[48]{};
+				const auto count = CaptureStackBackTrace(0, 48, frames, nullptr);
+				for (USHORT i = 0; i < count; ++i)
+				{
+					if (frames[i] == reinterpret_cast<void*>(0x140BADEA3))
+					{
+						TerminateProcess(GetCurrentProcess(), 0);
+					}
+				}
+			}
+
+			fatal_error_hook.invoke<void>("%s", message);
+		}
+
 		void show_mouse_cursor()
 		{
 			while (ShowCursor(TRUE) < 0);
@@ -83,7 +112,7 @@ namespace exception
 				info.append("\r\n");
 			};
 
-			line("IW7-Mod Crash Dump");
+			line("IW7S Crash Dump");
 			line("");
 			line("Version: "s + VERSION);
 			line("Environment: "s + (game::environment::is_dedi() ? "Dedicated" : "Base"));
@@ -106,12 +135,12 @@ namespace exception
 
 		void write_minidump(const LPEXCEPTION_POINTERS exceptioninfo)
 		{
-			crash_name = utils::string::va("minidumps/iw7mod-crash-%s.zip", get_timestamp().data());
+			crash_name = utils::string::va("minidumps/iw7s-crash-%s.zip", get_timestamp().data());
 
 			utils::compression::zip::archive zip_file{};
 			zip_file.add("crash.dmp", create_minidump(exceptioninfo));
 			zip_file.add("info.txt", generate_crash_info(exceptioninfo));
-			zip_file.write(crash_name, "IW7-Mod Crash Dump");
+			zip_file.write(crash_name, "IW7S Crash Dump");
 		}
 
 		bool is_harmless_error(const LPEXCEPTION_POINTERS exceptioninfo)
@@ -157,6 +186,11 @@ namespace exception
 
 			set_filter(exception_filter);
 			utils::hook::jump(set_filter, set_unhandled_exception_filter_stub, true);
+		}
+
+		void post_unpack() override
+		{
+			fatal_error_hook.create(0x140D34180, fatal_error_stub);
 		}
 	};
 }

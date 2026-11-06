@@ -5,6 +5,7 @@
 #include "scheduler.hpp"
 #include "party.hpp"
 #include "scripting.hpp"
+#include "lobby_bots.hpp"
 
 #include "game/game.hpp"
 #include "game/scripting/execution.hpp"
@@ -29,7 +30,7 @@ namespace bots
 
 		void load_bot_data()
 		{
-			static const char* bots_txt = "iw7-mod/bots.txt";
+			static const char* bots_txt = "iw7s/bots.txt";
 
 			std::string bots_content;
 			if (!utils::io::read_file(bots_txt, &bots_content))
@@ -60,6 +61,12 @@ namespace bots
 
 		const char* get_random_bot_name()
 		{
+			// Bots de la sala pública: el nombre que tenían en la sala
+			if (const auto lobby_name = lobby_bots::take_bot_name(); lobby_name)
+			{
+				return utils::string::va("%s", lobby_name->data());
+			}
+
 			if (bot_names.empty())
 			{
 				load_bot_data();

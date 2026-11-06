@@ -596,16 +596,17 @@ namespace patches
 		{
 			apply_publisher_variables_hook.invoke<void>(a1, ns);
 
-			game::Dvar_SetFromStringByName("online_mp_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_zombie_party_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_zombie_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_zombie_party_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_mp_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_zombies_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_mp_party_missionteam_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_mp_party_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_mp_party_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
-			game::Dvar_SetFromStringByName("online_mp_missionteam_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			// XP de publisher_variables.json (no se fuerza a 1)
+			//game::Dvar_SetFromStringByName("online_mp_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_zombie_party_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_zombie_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_zombie_party_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_mp_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_zombies_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_mp_party_missionteam_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_mp_party_weapon_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_mp_party_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
+			//game::Dvar_SetFromStringByName("online_mp_missionteam_xpscale", "1", game::DVAR_SOURCE_INTERNAL);
 
 			game::Cbuf_ExecuteBuffer(0, 0, "exec publisher_variables_overide.cfg\n");
 		}

@@ -3,7 +3,6 @@
 
 #include "game/game.hpp"
 
-#include "component/rcon.hpp"
 #include "component/scheduler.hpp"
 
 #include <utils/flags.hpp>
@@ -13,6 +12,7 @@
 #include "syscon.hpp"
 
 #include <utils/io.hpp>
+#include <utils/string.hpp>
 
 namespace game_console
 {
@@ -36,6 +36,13 @@ namespace console
 	void init_console_type()
 	{
 		con_type = con_type_default;
+
+		// Cliente: sin consola externa (la ventana de cmd repite lo mismo que la consola del juego). Solo se abre
+		// con -wincon, -terminal o -syscon; el servidor dedicado la sigue teniendo
+		if (!game::environment::is_dedi())
+		{
+			con_type = con_type_none;
+		}
 
 		const auto noconsole_flag = utils::flags::has_flag("noconsole");
 		if (!game::environment::is_dedi() && noconsole_flag)
@@ -117,19 +124,17 @@ namespace console
 
 	void dispatch_message(const int type, const std::string& message)
 	{
-		if (rcon::message_redirect(message))
-		{
-			return;
-		}
-
 		auto out = message;
 		if (out.empty() || out.back() != '\n')
 		{
 			out.push_back('\n');
 		}
 
-		if (console_log && console_log->current.string)
-			utils::io::write_file(console_log->current.string, out, true);
+		// Antes de registrar g_consoleLog se usa la ruta por defecto.
+		{
+			const auto* path = console_log && console_log->current.string ? console_log->current.string : "iw7s/logs/console.log";
+			utils::io::write_file(path, out, true);
+		}
 
 		if (console::is_enabled())
 		{
@@ -195,8 +200,24 @@ namespace console
 		initialized = true;
 
 		init_console_type();
+
+		// Separador de cada arranque en console.log
+		utils::io::write_file("iw7s/logs/console.log", "\n----- arranque del juego -----\n", true);
+
+		// console.log se escribe también sin consola exterior
+		scheduler::once([]()
+		{
+			console_log = game::Dvar_RegisterString("g_consoleLog", "iw7s/logs/console.log", game::DVAR_FLAG_SAVED, "Where to write the console log");
+		}, scheduler::main);
+
 		if (get_console_type() == con_type_none)
 		{
+			// Si hay ventana de consola (lanzado desde una consola), se suelta
+			if (!game::environment::is_dedi())
+			{
+				ShowWindow(GetConsoleWindow(), SW_HIDE);
+				FreeConsole();
+			}
 			return;
 		}
 		else if (get_console_type() == con_type_wincon)
@@ -211,10 +232,5 @@ namespace console
 		{
 			::syscon::init();
 		}
-
-		scheduler::once([]()
-		{
-			console_log = game::Dvar_RegisterString("g_consoleLog", "iw7-mod/logs/console.log", game::DVAR_FLAG_SAVED, "Where to write the console log");
-		}, scheduler::main);
 	}
 }

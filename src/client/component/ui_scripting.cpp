@@ -13,8 +13,6 @@
 #include "party.hpp"
 #include "scheduler.hpp"
 #include "scripting.hpp"
-#include "server_list.hpp"
-#include "download.hpp"
 
 #include "game/ui_scripting/execution.hpp"
 //#include "game/scripting/execution.hpp"
@@ -144,7 +142,9 @@ namespace ui_scripting
 		std::unordered_set<std::string> load_scripts()
 		{
 			std::unordered_set<std::string> loaded{};
-			const auto scripts = filesystem::list_files("ui_scripts/", true);
+			// Como en la versión anterior: se cargan las carpetas de todas las rutas aunque se llamen igual
+			// (p. ej. MainMenu de la carpeta del juego y MainMenu de otra ruta), no solo la de más prioridad
+			const auto scripts = filesystem::list_files("ui_scripts/", false);
 
 			for (const auto& script : scripts)
 			{
@@ -280,23 +280,6 @@ namespace ui_scripting
 				}, scheduler::lui, std::chrono::milliseconds(delay));
 			};
 
-			auto server_list_table = table();
-			lua["serverlist"] = server_list_table;
-
-			server_list_table["getplayercount"] = server_list::get_player_count;
-			server_list_table["getservercount"] = server_list::get_server_count;
-
-			auto download_table = table();
-			lua["download"] = download_table;
-
-			download_table["abort"] = download::stop_download;
-
-			//download_table["userdownloadresponse"] = party::user_download_response;
-			//download_table["getwwwurl"] = []
-			//{
-			//	const auto state = party::get_server_connection_state();
-			//	return state.base_url;
-			//};
 		}
 
 		void enable_globals()
@@ -500,6 +483,19 @@ namespace ui_scripting
 
 			console::error("%s (R:0x%llX)\n", buffer, (uint64_t)_ReturnAddress());
 
+			// Pila de llamadas Lua (archivo:línea y función) para saber de dónde viene el error
+			for (auto level = 0; level < 12; ++level)
+			{
+				game::hks::lua_Debug info{};
+				if (!game::hks::hksi_lua_getstack(state, level, &info))
+				{
+					break;
+				}
+
+				game::hks::hksi_lua_getinfo(state, "nSl", &info);
+				console::error("    %s:%d (%s)\n", info.short_src, info.currentline, info.name ? info.name : "?");
+			}
+
 			hksi_luaL_error_hook.invoke<void>(state, "%s", buffer);
 		}
 
@@ -559,6 +555,11 @@ namespace ui_scripting
 			utils::hook::set(0x1414B4D98, lua_calls::is_development_build_stub); // IsDevelopmentBuild
 
 			game::Dvar_RegisterBool("ui_showList", false, game::DVAR_FLAG_SAVED, "Show the current menus on the UI stack");
+
+			// ui_scripts/hud_tilt: inclinación del HUD (0 plano, 1 como el original)
+			game::Dvar_RegisterFloat("cg_hudTilt", 0.0f, 0.0f, 1.0f, game::DVAR_FLAG_SAVED, "HUD tilt: 0 flat, 1 original");
+			game::Dvar_RegisterFloat("cg_hudTiltTop", -1.0f, -1.0f, 1.0f, game::DVAR_FLAG_SAVED,
+				"HUD tilt of the minimap (top): -1 same as cg_hudTilt, 0 flat, 1 original");
 
 			utils::hook::jump(0x1411C8DB0, removed_function_stub);
 			utils::hook::jump(0x1411C9330, removed_function_stub);

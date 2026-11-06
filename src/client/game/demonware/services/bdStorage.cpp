@@ -6,11 +6,133 @@
 #include <utils/nt.hpp>
 #include <utils/io.hpp>
 #include <utils/cryptography.hpp>
+#include <utils/compression.hpp>
 
 #include "game/game.hpp"
 
 namespace demonware
 {
+	namespace
+	{
+		// Playlist sin comprimir en iw7s/dw/data, con los nombres de tu extractor: la lista en un .pdo y las recetas
+		// de los modos ("recipe N" en la lista) en .gam (texto) o .dat (binarias). El nombre es la posición en el
+		// .aggr en hexadecimal: las recetas van por orden de nombre (la primera es recipe 0). Se comprime al pedirla
+		// el juego.
+		// Formato .aggr: u16 1, u16 posición y u16 tamaño de la lista, u16 número de recetas, u16 posición y u16
+		// tamaño de cada receta; detrás, cada parte comprimida con zlib.
+		bool build_playlists_aggr(std::string& buffer)
+		{
+			const std::filesystem::path dir = "iw7s/dw/data";
+			std::error_code ec;
+			if (!std::filesystem::is_directory(dir, ec))
+			{
+				return false;
+			}
+
+			std::vector<std::filesystem::path> lists, recipe_files;
+			for (const auto& entry : std::filesystem::directory_iterator(dir, ec))
+			{
+				if (!entry.is_regular_file(ec))
+				{
+					continue;
+				}
+
+				auto ext = entry.path().extension().string();
+				std::transform(ext.begin(), ext.end(), ext.begin(), [](const unsigned char c) { return static_cast<char>(std::tolower(c)); });
+				if (ext == ".pdo")
+				{
+					lists.push_back(entry.path());
+				}
+				else if (ext == ".gam" || ext == ".dat")
+				{
+					recipe_files.push_back(entry.path());
+				}
+			}
+
+			if (lists.empty())
+			{
+				return false;
+			}
+
+			std::sort(lists.begin(), lists.end());
+			std::sort(recipe_files.begin(), recipe_files.end(), [](const auto& a, const auto& b)
+			{
+				return a.filename().string() < b.filename().string();
+			});
+
+			std::vector<std::string> parts(1);
+			if (!utils::io::read_file(lists[0].string(), &parts[0]))
+			{
+				return false;
+			}
+
+			for (const auto& file : recipe_files)
+			{
+				std::string recipe;
+				if (!utils::io::read_file(file.string(), &recipe))
+				{
+					return false;
+				}
+
+				parts.emplace_back(std::move(recipe));
+			}
+
+			std::string data;
+			std::vector<std::pair<std::size_t, std::size_t>> entries;
+			auto offset = 2u + 4u + 2u + 4u * (parts.size() - 1);
+			for (const auto& part : parts)
+			{
+				const auto compressed = utils::compression::zlib::compress(part);
+				if (compressed.empty())
+				{
+					return false;
+				}
+
+				entries.emplace_back(offset, compressed.size());
+				offset += compressed.size();
+				data.append(compressed);
+			}
+
+			if (offset > 0xFFFF)
+			{
+				console::error("iw7s/dw/data: la playlist comprimida ocupa %zu bytes (máximo 65535)\n", offset);
+				return false;
+			}
+
+			std::string header;
+			const auto write_u16 = [&header](const std::size_t value)
+			{
+				header.push_back(static_cast<char>(value & 0xFF));
+				header.push_back(static_cast<char>((value >> 8) & 0xFF));
+			};
+
+			write_u16(1);
+			write_u16(entries[0].first);
+			write_u16(entries[0].second);
+			write_u16(entries.size() - 1);
+			for (auto i = 1u; i < entries.size(); ++i)
+			{
+				write_u16(entries[i].first);
+				write_u16(entries[i].second);
+			}
+
+			buffer = header + data;
+			return true;
+		}
+
+		// Orden: sin comprimir de iw7s/dw/data, iw7s/dw/playlists_tu23.aggr y la del ejecutable
+		std::string load_playlists()
+		{
+			std::string buffer;
+			if (build_playlists_aggr(buffer) || utils::io::read_file("iw7s/dw/playlists_tu23.aggr", &buffer))
+			{
+				return buffer;
+			}
+
+			return utils::nt::load_resource(DW_PLAYLISTS);
+		}
+	}
+
 	bdStorage::bdStorage() : service(10, "bdStorage")
 	{
 		this->register_task(20, &bdStorage::listAllPublisherFiles);
@@ -22,7 +144,7 @@ namespace demonware
 
 		this->map_publisher_resource("motd-.*\\.txt", DW_MOTD);
 		// this->map_publisher_resource("ffotd-.*\\.ff", DW_FASTFILE);
-		this->map_publisher_resource("playlists(_.+)?\\.aggr", DW_PLAYLISTS);
+		this->map_publisher_resource_variant("playlists(_.+)?\\.aggr", load_playlists);
 	}
 
 	void bdStorage::map_publisher_resource(const std::string& expression, const INT id)
@@ -127,7 +249,7 @@ namespace demonware
 
 	std::string bdStorage::get_user_file_path(const std::string& name)
 	{
-		const auto regular_path = "iw7-mod/players2/user/"s;
+		const auto regular_path = "iw7s/players2/user/"s;
 		
 		// disable this for now
 		/*static const auto fs_game = game::Dvar_FindVar("fs_game");

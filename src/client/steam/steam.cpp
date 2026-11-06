@@ -252,7 +252,8 @@ namespace steam
 	bool SteamAPI_Init()
 	{
 		const std::filesystem::path steam_path = steam::SteamAPI_GetSteamInstallPath();
-		if (steam_path.empty() || ::utils::flags::has_flag("nosteam"))
+		// sin Steam instalado, sin Steam abierto o con -nosteam: el juego arranca sin Steam
+		if (steam_path.empty() || ::utils::flags::has_flag("nosteam") || !steam_proxy::is_steam_running())
 		{
 			// without steamclient64.dll or gameoverlayrenderer64.dll, WinMain quietly returns 0 right after Com_Init. we add these here to combat this
 			add_ldr_entry(create_stand_in_image("steamclient64.pdb"), 0x1000, "steamclient64.dll");

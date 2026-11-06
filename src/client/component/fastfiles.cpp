@@ -8,6 +8,7 @@
 #include "console/console.hpp"
 
 #include "filesystem.hpp"
+#include "images.hpp"
 
 #include <utils/hook.hpp>
 #include <utils/string.hpp>
@@ -107,6 +108,13 @@ namespace fastfiles
 			}
 
 			auto result = db_add_xasset_hook.invoke<game::XAssetHeader>(type, header_ptr);
+
+			// PNG de iw7s\images: se cambia la textura de la imagen ya cargada
+			if (type == game::ASSET_TYPE_IMAGE && result.image)
+			{
+				images::on_image_added(result.image);
+			}
+
 			return result;
 		}
 

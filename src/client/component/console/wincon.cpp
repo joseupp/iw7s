@@ -16,7 +16,7 @@ namespace wincon
 	DWORD WINAPI console(LPVOID)
 	{
 		ShowWindow(GetConsoleWindow(), SW_SHOW);
-		SetConsoleTitleA("IW7-Mod Console");
+		SetConsoleTitleA("IW7S Console");
 
 		std::string cmd;
 		exit = false;

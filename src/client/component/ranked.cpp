@@ -2,7 +2,9 @@
 #include "loader/component_loader.hpp"
 
 #include "component/command.hpp"
+#include "component/console/console.hpp"
 #include "component/dvars.hpp"
+#include "component/lobby_bots.hpp"
 
 #include "game/game.hpp"
 
@@ -23,6 +25,17 @@ namespace ranked
 		utils::hook::detour party_host_using_assigned_teams_hook;
 
 		bool running_playlist_rules = false;
+
+		// Reglas de la sala pública editadas en el menú de opciones (como en BO3): se mantienen aunque la playlist vuelva
+		// a cargar la receta del modo (al volver de una partida, rotación...), hasta que se elige un modo desde la
+		// playlist (lobby_rules_reset, ui_scripts/GameSetup/gamesetupoptions.lua) o la playlist cambia de modo.
+		constexpr auto public_match_rules = 0x14B039368; // GameStateInfo público + 0x10 (privado: 0x14B038760)
+		constexpr auto match_rules_size = 0xC08;
+		utils::hook::detour match_rules_set_data_hook;
+		std::array<std::uint8_t, match_rules_size> edited_rules{};
+		std::string edited_gametype{};
+		bool rules_edited = false;
+		game::dvar_t* lobby_rules_reset = nullptr;
 
 		constexpr auto max_clients = 18;
 
@@ -167,7 +180,9 @@ namespace ranked
 
 		int party_using_party_based_teams_stub(void* party)
 		{
-			if (game::Com_GameMode_GetActiveGameMode() == game::GAME_MODE_MP)
+			// Sala pública con bots (lobby_bots): como en la versión anterior, cada bot entra en el equipo de la sala
+			// (bots::spawn_bots con equipo); forzado a 1 el juego los reparte a partes iguales
+			if (game::Com_GameMode_GetActiveGameMode() == game::GAME_MODE_MP && !lobby_bots::has_bots())
 			{
 				return 1;
 			}
@@ -176,7 +191,7 @@ namespace ranked
 
 		int party_host_using_assigned_teams_stub(void* party)
 		{
-			if (game::Com_GameMode_GetActiveGameMode() == game::GAME_MODE_MP)
+			if (game::Com_GameMode_GetActiveGameMode() == game::GAME_MODE_MP && !lobby_bots::has_bots())
 			{
 				return 1;
 			}
@@ -192,11 +207,72 @@ namespace ranked
 			return utils::hook::invoke<int>(0x140C72500, session); // Party_GetNumGameSlots
 		}
 
+		std::string get_ui_gametype()
+		{
+			const auto* gametype = game::Dvar_FindVar("ui_gametype");
+			return gametype && gametype->current.string ? gametype->current.string : "";
+		}
+
+		bool using_public_rules()
+		{
+			if (game::Com_GameMode_GetActiveGameMode() != game::GAME_MODE_MP || in_combat_training())
+			{
+				return false;
+			}
+
+			const auto* state = static_cast<const std::uint8_t*>(game_state_info_get_hook.invoke<void*>());
+			return state && *reinterpret_cast<const std::uint64_t*>(state + 0x10) == public_match_rules;
+		}
+
+		// MatchRules.SetData (Lua): después de cada cambio del menú se guardan las reglas de la sala pública
+		int match_rules_set_data_stub(void* state)
+		{
+			const auto result = match_rules_set_data_hook.invoke<int>(state);
+			if (game::Com_FrontEnd_IsInFrontEnd() && using_public_rules())
+			{
+				std::memcpy(edited_rules.data(), reinterpret_cast<void*>(public_match_rules), match_rules_size);
+				edited_gametype = get_ui_gametype();
+				rules_edited = true;
+
+				// Cambios hechos después de elegir modo: la playlist ya se ha aplicado
+				if (lobby_rules_reset && lobby_rules_reset->current.enabled)
+				{
+					game::Dvar_SetBool(lobby_rules_reset, false);
+				}
+			}
+			return result;
+		}
+
+		void restore_edited_rules()
+		{
+			if (lobby_rules_reset && lobby_rules_reset->current.enabled)
+			{
+				game::Dvar_SetBool(lobby_rules_reset, false);
+				rules_edited = false;
+			}
+
+			if (!rules_edited)
+			{
+				return;
+			}
+
+			// Con el mismo modo se recuperan los cambios; si la playlist cambia de modo, se descartan
+			if (using_public_rules() && get_ui_gametype() == edited_gametype)
+			{
+				std::memcpy(reinterpret_cast<void*>(public_match_rules), edited_rules.data(), match_rules_size);
+				return;
+			}
+
+			rules_edited = false;
+		}
+
 		void playlist_run_rules_stub(const int controller, const int rule)
 		{
 			running_playlist_rules = true;
 			playlist_run_rules_hook.invoke<void>(controller, rule);
 			running_playlist_rules = false;
+
+			restore_edited_rules();
 
 			sync_combat_training_bots();
 		}
@@ -240,6 +316,15 @@ namespace ranked
 				party_host_using_assigned_teams_hook.create(0x1409DB330, party_host_using_assigned_teams_stub); // PartyHost_UsingAssignedTeams
 
 				utils::hook::nop(0x140E7ADC4, 26); // allow saving recipes in onlinegame
+
+				// MatchRules.SetData (0x1406B6100) sale sin hacer nada en el estado público (GameStateInfo_IsPublic): así
+				// el menú de opciones de la sala pública edita las reglas de la receta del modo de la playlist, como en BO3
+				static constexpr std::uint8_t xor_eax_eax[] = {0x33, 0xC0, 0x90, 0x90, 0x90};
+				utils::hook::copy(0x1406B6115, xor_eax_eax, sizeof(xor_eax_eax));
+				match_rules_set_data_hook.create(0x1406B6100, match_rules_set_data_stub);
+
+				lobby_rules_reset = game::Dvar_RegisterBool("lobby_rules_reset", false, game::DVAR_FLAG_NONE,
+					"Set by the playlist menu: discard the public lobby rules changed in the options menu");
 
 				command::add("xsyncbots", sync_combat_training_bots);
 			}

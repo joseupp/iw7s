@@ -10,6 +10,9 @@
 #include <utils/flags.hpp>
 #include <utils/string.hpp>
 #include <utils/binary_resource.hpp>
+#include <utils/cryptography.hpp>
+#include <utils/io.hpp>
+#include <utils/smbios.hpp>
 
 #include "console/console.hpp"
 #include "steam/interface.hpp"
@@ -133,19 +136,43 @@ namespace steam_proxy
 			}, scheduler::main);
 		}
 
+		// Licencia comprobada: con Steam abierto se verifica la compra (BIsSubscribedApp) y se guarda una licencia
+		// ligada a este equipo; sin Steam abierto el juego solo arranca si ya se verifico antes en este equipo
+		// (como el modo sin conexion de Steam).
+		const char* license_path = "iw7s/players2/license.dat";
+
+		std::string make_license(const size_t app_id)
+		{
+			return utils::cryptography::sha256::compute(
+				utils::string::va("iw7s-license|%zu|%s", app_id, utils::smbios::get_uuid().data()), true);
+		}
+
+		bool has_saved_license(const size_t app_id)
+		{
+			std::string data{};
+			return utils::io::read_file(license_path, &data) && data == make_license(app_id);
+		}
+
+		void save_license(const size_t app_id)
+		{
+			utils::io::write_file(license_path, make_license(app_id), false);
+		}
+
 		ownership_state start_mod_unsafe(const std::string& title, size_t app_id)
 		{
 			if (!client_utils_ || !client_user_)
 			{
-				return ownership_state::nosteam;
+				// Steam cerrado o sin sesion iniciada
+				return has_saved_license(app_id) ? ownership_state::success : ownership_state::nosteam;
 			}
 
 			if (!client_user_.invoke<bool>("BIsSubscribedApp", app_id))
 			{
-				//app_id = 480; // Spacewar
+				std::remove(license_path);
 				return ownership_state::unowned;
 			}
 
+			save_license(app_id);
 			client_utils_.invoke<void>("SetAppIDForCurrentPipe", app_id, false);
 
 			return ownership_state::success;
@@ -164,7 +191,7 @@ namespace steam_proxy
 				MessageBoxA(GetForegroundWindow(), e.what(), "Error", MB_ICONERROR);
 				TerminateProcess(GetCurrentProcess(), 1234);
 			}
-			return ownership_state::error;
+			return ownership_state::success;
 		}
 	}
 
@@ -173,7 +200,7 @@ namespace steam_proxy
 	public:
 		void post_load() override
 		{
-			if (game::environment::is_dedi() || is_disabled() || utils::nt::is_wine() || !FindWindowA(0, "Steam"))
+			if (game::environment::is_dedi() || is_disabled() || utils::nt::is_wine() || !is_steam_running())
 			{
 				return;
 			}
@@ -184,17 +211,17 @@ namespace steam_proxy
 
 		void post_unpack() override
 		{
-			if (game::environment::is_dedi() || is_disabled() || utils::nt::is_wine())
+			if (game::environment::is_dedi() || utils::nt::is_wine())
 			{
 				return;
 			}
 
 			try
 			{
-				switch (const auto res = start_mod("\xF0\x9F\x8C\xA0" "IW7-Mod", steam::SteamUtils()->GetAppID()))
+				switch (const auto res = start_mod("\xF0\x9F\x8C\xA0" "IW7S", steam::SteamUtils()->GetAppID()))
 				{
 				case ownership_state::nosteam:
-					throw std::runtime_error("Steam must be running to play this game!");
+					throw std::runtime_error("Steam must be running the first time to verify that you own the game!");
 				case ownership_state::unowned:
 					throw std::runtime_error("You must own the game on Steam to play this mod!");
 				case ownership_state::error:
@@ -249,6 +276,42 @@ namespace steam_proxy
 		return steam_overlay_module_;
 	}
 #endif
+
+	// Steam abierto: HKCU\Software\Valve\Steam\ActiveProcess\pid apunta a un proceso vivo.
+	// Sin Steam abierto no se carga steamclient64.dll (podria abrir Steam) y el juego funciona igual.
+	bool is_steam_running()
+	{
+		static const auto running = []()
+		{
+			HKEY key{};
+			if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Valve\\Steam\\ActiveProcess", 0, KEY_QUERY_VALUE, &key) != ERROR_SUCCESS)
+			{
+				return false;
+			}
+
+			DWORD pid{};
+			DWORD size = sizeof(pid);
+			const auto result = RegQueryValueExA(key, "pid", nullptr, nullptr, reinterpret_cast<BYTE*>(&pid), &size);
+			RegCloseKey(key);
+			if (result != ERROR_SUCCESS || !pid)
+			{
+				return false;
+			}
+
+			const auto process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+			if (!process)
+			{
+				return false;
+			}
+
+			DWORD exit_code{};
+			const auto alive = GetExitCodeProcess(process, &exit_code) && exit_code == STILL_ACTIVE;
+			CloseHandle(process);
+			return alive;
+		}();
+
+		return running;
+	}
 
 	void initialize()
 	{

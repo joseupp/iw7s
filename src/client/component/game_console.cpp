@@ -16,7 +16,7 @@
 
 #include "version.hpp"
 
-#define console_font game::R_RegisterFont("fonts/fira_mono_regular.ttf", 18)
+#define console_font game::R_RegisterFont("fonts/fira_mono_regular.ttf", 42)
 #define material_white game::Material_RegisterHandle("white")
 
 namespace game_console
@@ -347,7 +347,7 @@ namespace game_console
 			con.globals.left_x = con.screen_min[0] + 6.0f;
 
 			draw_input_box(1, dvars::con_inputBoxColor->current.vector);
-			draw_input_text_and_over("IW7-Mod: " VERSION ">", color_title);
+			draw_input_text_and_over("IW7S: " SHORTVERSION ">", color_title);
 
 			con.globals.left_x = con.globals.x;
 
@@ -450,7 +450,7 @@ namespace game_console
 				const auto width = (con.screen_max[0] - con.screen_min[0]) - 12.0f;
 				const auto height = ((con.screen_max[1] - con.screen_min[1]) - 32.0f) - 12.0f;
 
-				game::R_AddCmdDrawText("IW7-Mod ", 0x7FFFFFFF, console_font, x,
+				game::R_AddCmdDrawText("IW7S ", 0x7FFFFFFF, console_font, x,
 					((height - 16.0f) + y) + console_font->pixelHeight, 1.0f, 1.0f, 0.0f, color_title, 0);
 
 				draw_output_scrollbar(x, y, width, height, output);

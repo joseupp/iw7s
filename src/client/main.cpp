@@ -66,7 +66,7 @@ FARPROC load_binary(uint64_t* base_address)
 	if (!utils::io::read_file(binary, &data))
 	{
 		throw std::runtime_error(utils::string::va(
-			"Failed to read game binary (%s)!\nPlease copy the iw7-mod.exe into your Call of Duty: Infinite Warfare installation folder and run it from there.",
+			"Failed to read game binary (%s)!\nPlease copy the iw7s.exe into your Call of Duty: Infinite Warfare installation folder and run it from there.",
 			binary.data()));
 	}
 
