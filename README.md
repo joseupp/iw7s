@@ -6,7 +6,7 @@ It is based on [IW7-Mod](https://github.com/auroramod/iw7-mod) and is the result
 
 > ***You must own [Call of Duty®: Infinite Warfare](https://store.steampowered.com/app/292730/Call_of_Duty_Infinite_Warfare/) on Steam.*** The game will not start if your account does not own it. Pirated copies are not supported.
 
-Current version: **r1000b** (beta).
+Current version: **r1004b** (beta).
 
 ---
 
@@ -20,20 +20,19 @@ Current version: **r1000b** (beta).
   - After the match most of them stay for the next one and some leave, just like a real lobby.
 - **Balanced mixed difficulty.** Each bot's rank matches its difficulty: veterans have high prestige levels and recruits have low ranks.
 - **Bot menu in the lobby:** number of allies and enemies, and the difficulty of each team.
-- **"Start match" button**, so you don't have to wait for the lobby to fill up.
 - **"Find match" goes straight into the lobby.** The game mode is changed from the lobby options.
-- **Editable match rules**, as in Black Ops 3. Your changes are kept until you pick another mode.
+- **Editable match rules**, Your changes are kept until you pick another mode.
 - **You earn XP and rank up** even offline.
-- **Message of the day** in the multiplayer menu, with its image and pop-up window, and with text you can customise.
+
 
 ### Graphics and textures
 - **Custom textures:** drop an image into the `iw7s\images` folder and it will always replace the game image with the same name. Works for weapons, camos, interface, icons, etc.
 - **Dumping of the game's images**, so you can edit them.
 - **`png2dds` tool**, which converts your images to the game's format.
-- **PlayStation controller icons** ready to use.
+
 
 ### View and HUD
-- **Weapon FOV independent** from the view FOV, as in modern Call of Duty games.
+- **Weapon FOV independent** from the view FOV.
 - **Wider and better-tuned FOV:**
   - Aim-down-sights zoom consistent with the chosen FOV.
   - Sniper scopes as in the original.
@@ -44,9 +43,7 @@ Current version: **r1000b** (beta).
 - **Everything in the game folder:** profiles, settings, logs and scripts. AppData is not used.
 - **Steam doesn't need to be open.** You only need to open it the first time, to verify that you own the game.
 - **No external console window.**
-- **The game closes cleanly**, without the error that sometimes appeared on exit.
-- **Playlist and settings can be edited** from the `iw7s\dw` folder.
-- Private matches without a countdown (optional).
+- **Playlist and settings can be edited** from the `iw7s\dw` 
 
 ---
 
