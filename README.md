@@ -6,7 +6,7 @@ It is based on [IW7-Mod](https://github.com/auroramod/iw7-mod) and is the result
 
 > ***You must own [Call of Duty®: Infinite Warfare](https://store.steampowered.com/app/292730/Call_of_Duty_Infinite_Warfare/) on Steam.*** The game will not start if your account does not own it. Pirated copies are not supported.
 
-Current version: **r1004b** (beta).
+Current version: **r1048b** (beta).
 
 ---
 
