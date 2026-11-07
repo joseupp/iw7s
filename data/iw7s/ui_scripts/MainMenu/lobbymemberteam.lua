@@ -147,11 +147,15 @@ MenuBuilder.m_types["LobbyMember"] = function ( menu, controller )
 	role:SetAnchorsAndPosition( 0, 0, 0, 1, _1080p * 336, _1080p * -32, 0, _1080p * 31 )
 	self:addElement( role )
 	self.MPPlayerRole = role
+	-- El equipo se cambia con Triángulo: solo un icono, a la derecha
 	if role.LeftBump and role.LeftBump.setText then
-		role.LeftBump:setText( Engine.Localize( "LUA_MENU_PAD_LEFT_TRIGGER_BUTTON" ), 0 )
+		role.LeftBump:setText( "", 0 )
 	end
 	if role.RightBump and role.RightBump.setText then
-		role.RightBump:setText( Engine.Localize( "LUA_MENU_PAD_RIGHT_TRIGGER_BUTTON" ), 0 )
+		role.RightBump:setText( Engine.Localize( "LUA_MENU_PAD_ALT2_BUTTON" ), 0 )
+		role.RightBump:SetFontSize( 32 * _1080p )
+		role.RightBump:SetTop( _1080p * -16 )
+		role.RightBump:SetBottom( _1080p * 16 )
 	end
 	-- L1 / R1 cambian la misión activa en la sala pública: el selector del juego no los usa aquí
 	if role.BindButton then

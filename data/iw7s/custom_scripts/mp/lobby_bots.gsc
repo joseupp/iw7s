@@ -25,11 +25,13 @@ main()
 }
 
 // Fin normal de la partida (lobby_bots.cpp): al volver a la sala se mantiene el equipo elegido con L2 / R2; si te
-// desconectas antes, vuelve a automático
+// sales antes, vuelve a automático. Al salirse el anfitrión también llega game_ended, pero el servidor se cierra en
+// ese mismo momento: solo cuenta si la partida sigue un momento después (marcador final)
 match_finished_watch()
 {
     setdvar( "lobby_bots_match_finished", 0 );
     level waittill( "game_ended" );
+    wait 1;
     setdvar( "lobby_bots_match_finished", 1 );
 }
 

@@ -97,7 +97,7 @@ namespace lobby_bots
 		game::dvar_t* lobby_bots_new_lobby = nullptr;      // ui_scripts/GameSetup/gamesetupoptions.lua: modo elegido en la playlist
 		game::dvar_t* lobby_bots_lobby_menu = nullptr;     // ui_scripts/public_lobby: se ha abierto la sala (LobbyMission)
 		game::dvar_t* lobby_bots_members = nullptr;        // para ui_scripts/public_lobby: jugadores en la sala pública (0 fuera)
-		game::dvar_t* lobby_bots_start_requested = nullptr; // LobbyMissionVerticalLayout: "Iniciar partida" pulsado (botón bloqueado)
+		game::dvar_t* lobby_bots_game_start_requested = nullptr; // LobbyMissionVerticalLayout: "Iniciar partida" pulsado (botón bloqueado)
 
 		// Menú de bots de la sala (ui_scripts/GameSetup/gamesetupbots.lua). -1 = automático (como hasta ahora: la sala se
 		// llena hasta party_maxplayers y la playlist pone bot_autoconnectdefault / bot_difficultydefault)
@@ -110,6 +110,20 @@ namespace lobby_bots
 		std::vector<std::uint64_t> fake_xuids{};
 		std::vector<std::string> pending_names{};   // nombres para los bots de la partida, en orden
 		std::vector<std::string> name_list{};
+		bool default_names = false;                 // name_list son los de Infinity Ward (clan IW)
+
+		// Apellidos de gente de Infinity Ward en los créditos de Infinite Warfare (el juego original también los usa
+		// para sus bots). Máximo 16 caracteres.
+		const std::vector<std::string> iw_names = {
+			"xLebessisx", "Eurek_88", "Monacelli-M", "WellmanW_7", "BinderBlitz",
+			"Carpenter_92", "Schwartz-21", "ii-Cohen-ii", "Ozzy_Marvin", "Surmenian_14",
+			"BruceTheBrute", "Rodriguez_09", "xGreenbergx", "Bansi_Blaze", "ChangGang_23",
+			"OHara_77", "Negus-N", "CarlyleCam", "Hernandez_HH", "ChenChen_99",
+			"SkillmanX", "Nichols-12", "Buchanan_6", "StaplesSnipe", "Dicdican_08",
+			"HaileStorm", "Valenton_V", "xValentinx", "Burrichter_44", "TTV-Su",
+			"Sutherland_S", "Montoya_13", "BoonDoggle", "Hagar-Hammer", "Benavente_91",
+			"SnyderNoScope", "Dunford_D", "KerbyKills", "Fonzy_Elenes", "MrSelf_7"
+		};
 		int next_join_time = 0;
 		bool first_wave_done = false;               // tanda inicial de bots al abrir la sala
 
@@ -132,7 +146,7 @@ namespace lobby_bots
 		std::vector<saved_bot> saved_roster{};
 		bool restore_pending = false;
 		bool came_from_match = false;
-		int saved_minplayers = 0;                   // party_minplayers de la lista antes de lobby_startcountdown (0 = sin cambiar)
+		std::atomic_bool game_start_requested{false};    // "Iniciar partida" pulsado: la sala pública puede empezar la cuenta atrás
 		std::map<std::string, std::string> saved_dvars{};     // valores de la playlist antes del modo manual
 		std::atomic_bool has_lobby_bots{false};     // hay bots de la sala (para ranked.cpp)
 		int applied_allies = -2;                    // cantidades del menú ya aplicadas a la sala (para repartir de nuevo)
@@ -188,38 +202,26 @@ namespace lobby_bots
 			return field<int>(party, 0x2D14) != 0 && field<int>(party, 0x2D08) != 0 && field<int>(party, 0x2D10) != 0;
 		}
 
-		bool is_public_lobby_raw()
-		{
-			// lobby_bots_public_root: Lobby.SetPartyUIRoot(PartyUIRoot.PUBLIC_MATCH_LOBBY) en multijugador (la sala de
-			// partida pública); con los menús modificados xblive_privatematch puede estar a 0 en otras salas
-			return game::Com_FrontEnd_IsInFrontEnd() && lobby_bots_public_root && lobby_bots_public_root->current.enabled &&
-				game::Com_GameMode_GetActiveGameMode() == game::GAME_MODE_MP && !get_dvar_bool("xblive_privatematch") &&
-				!get_dvar_bool("systemlink") && is_lobby_host();
-		}
-
-		// Una vez dentro de la sala pública se sigue en ella mientras seamos anfitrión del party en el menú y no se
-		// abra otra sala (lobby_bots_public_root solo cambia con Lobby.SetPartyUIRoot de los menús de sala): desde la
-		// sala se abren otros menús (crear clase...) que cambian xblive_privatematch u otros datos, y la sala dejaba
-		// de esperar al botón "Iniciar partida".
-		bool public_lobby_latched = false;
-
+		// Sala pública: solo la sala de partida pública de multijugador (ui_scripts/public_lobby:
+		// Lobby.SetPartyUIRoot(PartyUIRoot.PUBLIC_MATCH_LOBBY) pone lobby_bots_public_root; las otras salas lo quitan),
+		// en el menú y como anfitrión del party
 		bool is_public_lobby()
 		{
-			const auto raw = is_public_lobby_raw();
-			const auto still_host = game::Com_FrontEnd_IsInFrontEnd() && lobby_bots_public_root &&
-				lobby_bots_public_root->current.enabled &&
+			return game::Com_FrontEnd_IsInFrontEnd() && lobby_bots_public_root && lobby_bots_public_root->current.enabled &&
 				game::Com_GameMode_GetActiveGameMode() == game::GAME_MODE_MP && !get_dvar_bool("systemlink") && is_lobby_host();
+		}
 
-			if (raw)
+		// La sala pública no depende de party_minplayers: el juego lo lee (Dvar_GetInt) para decidir si empieza o
+		// mantiene la cuenta atrás y cuántos jugadores faltan. En la sala pública se responde 1 con "Iniciar partida"
+		// pulsado y, si no, uno más que party_maxplayers (nunca se alcanza: la sala espera). Fuera de ella, el valor real.
+		int party_game_start_requested_stub(game::dvar_t* dvar)
+		{
+			if (!is_public_lobby())
 			{
-				public_lobby_latched = true;
-			}
-			else if (!still_host)
-			{
-				public_lobby_latched = false;
+				return utils::hook::invoke<int>(0x140035D30, dvar);
 			}
 
-			return public_lobby_latched;
+			return game_start_requested ? 1 : get_dvar_int("party_maxplayers", 18) + 1;
 		}
 
 		bool is_in_match()
@@ -324,10 +326,10 @@ namespace lobby_bots
 				}
 			}
 
-			if (name_list.empty())
+			default_names = name_list.empty();
+			if (default_names)
 			{
-				name_list = {"Ghost", "Raptor", "Viper", "Nomad", "Reaper", "Falcon", "Havoc", "Spectre", "Bishop",
-					"Kodiak", "Wraith", "Talon", "Rook", "Sable", "Vandal", "Echo", "Onyx"};
+				name_list = iw_names;
 			}
 		}
 
@@ -474,6 +476,8 @@ namespace lobby_bots
 			field<int>(slot, member::head) = identity ? identity->head : heads[random_int(0, static_cast<int>(heads.size()) - 1)];
 			field<int>(slot, member::body) = identity ? identity->body : bodies[random_int(0, static_cast<int>(bodies.size()) - 1)];
 			std::memset(slot + member::clan_tag, 0, 5);
+			const auto* clan = get_clan_tag(name);
+			std::memcpy(slot + member::clan_tag, clan, std::min<std::size_t>(std::strlen(clan), 4));
 			field<int>(slot, member::team_selection) = 0;
 			field<int>(slot, member::lobby_team) = 0;
 
@@ -809,24 +813,19 @@ namespace lobby_bots
 			applied_enemies = -2;
 		}
 
-		// Vuelve a dejar party_minplayers como lo trae la lista de partidas (la sala espera de nuevo al botón)
-		void restore_minplayers()
+		// La sala vuelve a esperar al botón "Iniciar partida" (si había cuenta atrás, el juego la cancela)
+		void cancel_game_start()
 		{
-			if (saved_minplayers <= 0)
+			if (!game_start_requested)
 			{
 				return;
 			}
 
-			if (auto* party_minplayers = game::Dvar_FindVar("party_minplayers"); party_minplayers)
-			{
-				game::Dvar_SetInt(party_minplayers, saved_minplayers);
-			}
+			game_start_requested = false;
 
-			saved_minplayers = 0;
-
-			if (lobby_bots_start_requested)
+			if (lobby_bots_game_start_requested)
 			{
-				game::Dvar_SetBool(lobby_bots_start_requested, false);
+				game::Dvar_SetBool(lobby_bots_game_start_requested, false);
 			}
 		}
 
@@ -917,9 +916,19 @@ namespace lobby_bots
 			bots_spawned = false;
 			match_seen_time = 0;
 
-			if (saved_minplayers > 0 && game::Com_FrontEnd_IsInFrontEnd() && (came_from_match || !is_public_lobby()))
+			// Vuelta de una partida que no ha terminado (el jugador se ha salido): el equipo elegido con L2 / R2 vuelve a
+			// automático. Antes solo se hacía sin sala, y el menú de partidas públicas crea otra enseguida (somos
+			// anfitrión), así que el equipo se mantenía. lobby_bots.gsc pone lobby_bots_match_finished a 0 al empezar
+			// la partida y a 1 con game_ended.
+			if (came_from_match && game::Com_FrontEnd_IsInFrontEnd() && !get_dvar_int("lobby_bots_match_finished", 0) &&
+				lobby_bots_team_choice && lobby_bots_team_choice->current.integer != 0)
 			{
-				restore_minplayers();
+				game::Dvar_SetInt(lobby_bots_team_choice, 0);
+			}
+
+			if (game_start_requested && game::Com_FrontEnd_IsInFrontEnd() && (came_from_match || !is_public_lobby()))
+			{
+				cancel_game_start();
 			}
 
 			// Modo nuevo elegido en la playlist: como en una búsqueda nueva, sala nueva con otros jugadores. Se van los
@@ -957,10 +966,11 @@ namespace lobby_bots
 					game::Dvar_SetBool(lobby_bots_lobby_menu, false);
 				}
 
-				// Sin sala en el menú (has salido de ella o te has desconectado de una partida): el equipo elegido con L2 / R2
+				// Fuera de la sala pública en el menú (has salido de ella o de una partida; el menú de partidas públicas
+				// crea otra sala enseguida, así que no se mira si somos anfitrión): el equipo elegido con L2 / R2
 				// vuelve a automático. Al terminar una partida (custom_scripts/mp/lobby_bots.gsc pone
 				// lobby_bots_match_finished con game_ended) se vuelve a la misma sala y se mantiene.
-				if (game::Com_FrontEnd_IsInFrontEnd() && !is_lobby_host() && lobby_bots_team_choice &&
+				if (game::Com_FrontEnd_IsInFrontEnd() && lobby_bots_team_choice &&
 					lobby_bots_team_choice->current.integer != 0 && !(restore_pending && get_dvar_int("lobby_bots_match_finished", 0)))
 				{
 					game::Dvar_SetInt(lobby_bots_team_choice, 0);
@@ -1188,6 +1198,20 @@ namespace lobby_bots
 		return has_lobby_bots;
 	}
 
+	const std::vector<std::string>& get_names()
+	{
+		std::lock_guard _(mutex);
+		load_names();
+		return name_list;
+	}
+
+	const char* get_clan_tag(const std::string& name)
+	{
+		std::lock_guard _(mutex);
+		load_names();
+		return default_names && std::ranges::find(iw_names, name) != iw_names.end() ? "IW" : "";
+	}
+
 	std::optional<std::string> take_bot_name()
 	{
 		std::lock_guard _(mutex);
@@ -1224,8 +1248,12 @@ namespace lobby_bots
 			// sesión (el LUI se reinicia al volver de cada partida y perdería el estado)
 			game::Dvar_RegisterBool("ui_onlineServicesDelayDone", false, game::DVAR_FLAG_NONE,
 				"The fake online services popup has already been shown this session");
-			lobby_bots_start_requested = game::Dvar_RegisterBool("lobby_bots_start_requested", false, game::DVAR_FLAG_NONE,
-				"The player started the public lobby countdown (lobby_startcountdown)");
+			lobby_bots_game_start_requested = game::Dvar_RegisterBool("lobby_bots_game_start_requested", false, game::DVAR_FLAG_NONE,
+				"The player started the public lobby countdown (lobby_partygo)");
+			// custom_scripts/mp/lobby_bots.gsc: 0 al empezar la partida, 1 si termina normalmente. Sin registrarlo, setdvar lo
+			// creaba como texto y get_dvar_int leía basura (nunca 0): el equipo elegido no volvía a automático
+			game::Dvar_RegisterInt("lobby_bots_match_finished", 0, 0, 1, game::DVAR_FLAG_NONE,
+				"The last match ended normally (set by lobby_bots.gsc)");
 			lobby_bots_public_root = game::Dvar_RegisterBool("lobby_bots_public_root", false, game::DVAR_FLAG_NONE,
 				"Set by ui_scripts/public_lobby: the open lobby is the public match lobby");
 			lobby_bots_team_choice = game::Dvar_RegisterInt("lobby_bots_team_choice", 0, 0, 2, game::DVAR_FLAG_NONE,
@@ -1257,10 +1285,14 @@ namespace lobby_bots
 			lobby_bots_difficulty_enemies = game::Dvar_RegisterInt("lobby_bots_difficulty_enemies", -1, -1, 3, game::DVAR_FLAG_NONE,
 				"Bot setup: difficulty of enemy bots (-1 = playlist / mixed, 0 recruit .. 3 veteran)");
 
-			// Botón "Iniciar partida" de la sala pública: la lista trae party_minplayers por encima de party_maxplayers
-			// (la sala se llena y espera); se baja a 1 y el juego empieza su cuenta atrás. Se restaura al volver de la
-			// partida o al salir de la sala.
-			command::add("lobby_startcountdown", []
+			// Botón "Iniciar partida" de la sala pública: da permiso para empezar la cuenta atrás (party_game_start_requested_stub).
+			// Se quita al volver de la partida, al salir de la sala o al cancelar.
+			utils::hook::call(0x1409D717B, party_game_start_requested_stub); // ¿puede empezar la cuenta atrás?
+			utils::hook::call(0x1409D7F31, party_game_start_requested_stub); // ¿sigue la cuenta atrás?
+			utils::hook::call(0x1409CA704, party_game_start_requested_stub); // jugadores que faltan
+			utils::hook::call(0x1409CCC7A, party_game_start_requested_stub); // estado de la sala (esperando jugadores)
+
+			command::add("lobby_partygo", []
 			{
 				std::lock_guard _(mutex);
 				if (!is_public_lobby())
@@ -1268,15 +1300,24 @@ namespace lobby_bots
 					return;
 				}
 
-				auto* party_minplayers = game::Dvar_FindVar("party_minplayers");
-				if (!party_minplayers || party_minplayers->current.integer <= 1)
+				if (game_start_requested)
 				{
 					return;
 				}
 
-				saved_minplayers = party_minplayers->current.integer;
-				game::Dvar_SetInt(party_minplayers, 1);
-				game::Dvar_SetBool(lobby_bots_start_requested, true);
+				// Cuenta atrás como en la partida privada (8 s): pt_pregameStartTimerLength es la espera sin mostrar
+				// (5 s por defecto) y pt_gameStartTimerLength la cuenta visible (8 s por defecto); queda 3 + 5.
+				if (auto* pregame = game::Dvar_FindVar("pt_pregameStartTimerLength"))
+				{
+					game::Dvar_SetInt(pregame, 3);
+				}
+				if (auto* game_start = game::Dvar_FindVar("pt_gameStartTimerLength"))
+				{
+					game::Dvar_SetInt(game_start, 5);
+				}
+
+				game_start_requested = true;
+				game::Dvar_SetBool(lobby_bots_game_start_requested, true);
 			});
 
 			// L2 / R2 en la sala pública (ui_scripts/MainMenu/lobbymission.lua): lobby_setteam <0 auto | 1 SDF | 2 UNSA>,
@@ -1300,7 +1341,7 @@ namespace lobby_bots
 				std::lock_guard _(mutex);
 
 				// Con "Iniciar partida" pulsado (cuenta atrás) ya no se puede cambiar de equipo
-				if (lobby_bots_start_requested && lobby_bots_start_requested->current.enabled)
+				if (lobby_bots_game_start_requested && lobby_bots_game_start_requested->current.enabled)
 				{
 					return;
 				}
@@ -1370,15 +1411,10 @@ namespace lobby_bots
 			});
 
 			// Círculo / Escape en la sala pública con la cuenta atrás en marcha: se cancela, como en la partida privada
-			command::add("lobby_cancelcountdown", []
+			command::add("lobby_cancelstartserver", []
 			{
 				std::lock_guard _(mutex);
-				if (saved_minplayers <= 0)
-				{
-					return;
-				}
-
-				restore_minplayers();
+				cancel_game_start();
 			});
 
 			// custom_scripts/mp/lobby_bots.gsc: rango y prestigio de la sala para cada bot (-1 si no es de la sala)

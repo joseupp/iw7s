@@ -28,33 +28,10 @@ namespace bots
 		utils::hook::detour get_bot_name_hook;
 		std::vector<std::string> bot_names{};
 
+		// Los de iw7s\bots.txt o, si no hay, los de Infinity Ward (lobby_bots.cpp)
 		void load_bot_data()
 		{
-			static const char* bots_txt = "iw7s/bots.txt";
-
-			std::string bots_content;
-			if (!utils::io::read_file(bots_txt, &bots_content))
-			{
-				// add cool people n contributors
-				bot_names = {
-					"mjkzy", "alicealys", "Joelrau",
-					"momo5502", "skkuull", "yoyothebest",
-					"Lierrmm", "Wanted", "January",
-					"diamante0018", "efinst0rm", "divity"
-				};
-
-				return;
-			}
-
-			auto names = utils::string::split(bots_content, '\n');
-			for (auto& name : names)
-			{
-				name = utils::string::replace(name, "\r", "");
-				if (!name.empty())
-				{
-					bot_names.emplace_back(name);
-				}
-			}
+			bot_names = lobby_bots::get_names();
 		}
 
 		size_t bot_id = 0;

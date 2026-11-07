@@ -13,8 +13,8 @@
 //
 // El anfitrión solo empieza la cuenta atrás (0x1409D7D80, estado 0x20) si 0x1409D70E0 lo permite, y en partida
 // pública eso exige que el emparejamiento haya creado / unido la sala (byte +0x9A00 del objeto, 0x140521EC0,
-// llamada única en 0x1409D7222). Se responde que sí: el resto de condiciones (party_minplayers, archivos del mapa)
-// siguen siendo las del juego.
+// llamada única en 0x1409D7222). Se responde que sí: el resto de condiciones (archivos del mapa) siguen siendo las
+// del juego.
 //
 // Al acabar la cuenta atrás (0x1409DA544 y siguientes) el anfitrión público pide al emparejamiento que cierre la
 // sala (0x1405244E0, pone +0x9A01) y espera a que lo confirme (+0x9A02, 0x140521620) antes de repartir equipos
@@ -23,8 +23,8 @@
 // Antes de eso 0x1409CDD00 (llamada 0x1409DA547) exige en pública una sala creada por el emparejamiento
 // (party + 0x2CD4 == 1 o flag 0x400 en + 0x2D8C): se da por buena.
 //
-// La cuenta atrás es la nativa: la lista de partidas trae party_minplayers 14 (por encima de party_maxplayers, la
-// sala se llena y espera) y el botón "Iniciar partida" (lobby_startcountdown, lobby_bots.cpp) lo baja a 1.
+// La cuenta atrás es la nativa, pero en la sala pública no depende de party_minplayers: solo empieza con el botón
+// "Iniciar partida" (lobby_startcountdown y party_minplayers_stub, lobby_bots.cpp).
 
 namespace public_lobby
 {

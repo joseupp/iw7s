@@ -257,8 +257,8 @@ function PostLoadFunc( f12_arg0, f12_arg1, f12_arg2 )
 	assert( f12_arg0.bindButton )
 	f12_arg0.bindButton:addEventHandler( "button_secondary", function ( f17_arg0, f17_arg1 )
 		-- Cuenta atrás iniciada con "Iniciar partida": se cancela en vez de salir (como en la partida privada)
-		if Engine.GetDvarBool( "lobby_bots_start_requested" ) then
-			Engine.Exec( "lobby_cancelcountdown" )
+		if Engine.GetDvarBool( "lobby_bots_game_start_requested" ) then
+			Engine.Exec( "lobby_cancelstartserver" )
 			return true
 		end
 		LUI.FlowManager.RequestPopupMenu( nil, "LeaveMissionLobby", true, f17_arg1.controllerIndex, false, {
@@ -336,7 +336,7 @@ end
 function AddPublicChangeTeam( menu, controller )
 	local cycle_team = function ( direction )
 		-- Con "Iniciar partida" pulsado (cuenta atrás) ya no se puede cambiar de equipo
-		if not Engine.GetDvarBool( "party_teambased" ) or Engine.GetDvarBool( "lobby_bots_start_requested" ) then
+		if not Engine.GetDvarBool( "party_teambased" ) or Engine.GetDvarBool( "lobby_bots_game_start_requested" ) then
 			return
 		end
 		local choice = (Engine.GetDvarInt( "lobby_bots_team_choice" ) + direction) % 3
@@ -356,15 +356,20 @@ function AddPublicChangeTeam( menu, controller )
 		cycle_team( 1 )
 		return true
 	end
-	menu.bindButton:addEventHandler( "button_left_trigger", change_team_left )
-	menu.bindButton:addEventHandler( "button_right_trigger", change_team_right )
+	-- Triángulo (el botón de amigos, que aquí no se usa): L2 queda para abrir el mensaje del día
+	menu.bindButton:addEventHandler( "button_alt2", change_team_right )
 
 	local ChangeTeam = MenuBuilder.BuildRegisteredType( "ChangeTeamOrRole", {
 		controllerIndex = controller
 	} )
 	ChangeTeam.id = "PublicChangeTeam"
-	ChangeTeam.LeftButtonIcon:setText( ToUpperCase( Engine.Localize( "LUA_MENU_PAD_LEFT_TRIGGER_BUTTON" ) ) )
-	ChangeTeam.RightButtonIcon:setText( ToUpperCase( Engine.Localize( "LUA_MENU_PAD_RIGHT_TRIGGER_BUTTON" ) ) )
+	-- Triángulo a la izquierda (donde iba L1); el icono es más pequeño que el de L1 con el mismo tamaño de letra: como
+	-- los de la barra de botones
+	ChangeTeam.LeftButtonIcon:setText( ToUpperCase( Engine.Localize( "LUA_MENU_PAD_ALT2_BUTTON" ) ) )
+	ChangeTeam.LeftButtonIcon:SetFontSize( 36 * _1080p )
+	ChangeTeam.LeftButtonIcon:SetTop( _1080p * -1 )
+	ChangeTeam.LeftButtonIcon:SetBottom( _1080p * 35 )
+	ChangeTeam.RightButtonIcon:setText( "" )
 	-- Las flechas del ratón mandan L1 / R1 (cambiarían la misión): con ratón se usan estas en su lugar
 	if ChangeTeam.ArrowLeft then
 		ChangeTeam.ArrowLeft:registerEventHandler( "button_action", change_team_left )

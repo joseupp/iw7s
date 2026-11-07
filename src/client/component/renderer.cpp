@@ -4,6 +4,7 @@
 #include "dvars.hpp"
 #include "directx.hpp"
 #include "console/console.hpp"
+#include "scheduler.hpp"
 
 #include "game/game.hpp"
 #include "game/dvars.hpp"
@@ -232,6 +233,79 @@ namespace renderer
 			a.jmp(0x140E2975D);
 		}
 
+		// R_SetState (hilo Backend): los estados de profundidad/stencil y de mezcla salen de tablas por índice que
+		// el juego vacía al descargar zonas. Si se dibuja un material de una zona recién descargada (al volver al menú
+		// o al salir), el puesto está a nulo y el juego crasheaba en 0x140E45614. Con el puesto vacío, ese estado
+		// no se cambia en este dibujo.
+		void depth_stencil_state_stub(utils::hook::assembler& a)
+		{
+			const auto skip = a.newLabel();
+
+			a.mov(rax, qword_ptr(rdx, rax, 3, 0x8B17910));
+			a.test(rax, rax);
+			a.jz(skip);
+			a.mov(rbx, qword_ptr(rax, rcx, 3));
+			a.jmp(0x140E45618);
+
+			a.bind(skip);
+			a.jmp(0x140E45646);
+		}
+
+		void blend_state_stub(utils::hook::assembler& a)
+		{
+			const auto skip = a.newLabel();
+
+			a.mov(rax, qword_ptr(rdx, rax, 3, 0x8B184B8));
+			a.test(rax, rax);
+			a.jz(skip);
+			a.mov(rbx, qword_ptr(rax, rcx, 3));
+			a.jmp(0x140E45670);
+
+			a.bind(skip);
+			a.jmp(0x140E45735);
+		}
+
+		// Lo mismo con las tablas de samplers (0x148B14A50, 0x148B155F8, 0x148B161A0) al fijar las texturas de un
+		// material: crasheaba en 0x140E3F8BC al cancelar la carga de un mapa y volver al menú principal.
+		// Tipo 1: mov rax, [r9 + rax * 8]; lea r9, [rax + r8 * 8]. Con el puesto vacío se sale sin cambiar nada,
+		// como si el material no tuviera samplers.
+		void* sampler_skip_stub(const std::uint64_t next, const std::uint64_t skip)
+		{
+			return utils::hook::assemble([=](utils::hook::assembler& a)
+			{
+				const auto empty = a.newLabel();
+
+				a.mov(rax, qword_ptr(r9, rax, 3));
+				a.test(rax, rax);
+				a.jz(empty);
+				a.lea(r9, qword_ptr(rax, r8, 3));
+				a.jmp(next);
+
+				a.bind(empty);
+				a.jmp(skip);
+			});
+		}
+
+		// Tipo 2: mov rax, [rdx + rax * 8]; lea rdi, [rax + rcx * 8]. Con el puesto vacío se usan los samplers por
+		// defecto del juego (puesto 0).
+		void* sampler_default_stub(const std::uint64_t next)
+		{
+			return utils::hook::assemble([=](utils::hook::assembler& a)
+			{
+				const auto found = a.newLabel();
+
+				a.mov(rax, qword_ptr(rdx, rax, 3));
+				a.test(rax, rax);
+				a.jnz(found);
+				a.mov(rax, qword_ptr(rdx));
+				a.xor_(ecx, ecx);
+
+				a.bind(found);
+				a.lea(rdi, qword_ptr(rax, rcx, 3));
+				a.jmp(next);
+			});
+		}
+
 		bool r_update_front_end_dvar_options_stub()
 		{
 			update_full_res_emissive();
@@ -274,6 +348,31 @@ namespace renderer
 
 			// fix particle effect flickering on AMD GPUs
 			utils::hook::jump(0x140E29757, utils::hook::assemble(half_res_emissive_compare_stub));
+
+			// crash en R_SetState al dibujar materiales de zonas ya descargadas
+			utils::hook::jump(0x140E4560C, utils::hook::assemble(depth_stencil_state_stub));
+			utils::hook::jump(0x140E45664, utils::hook::assemble(blend_state_stub));
+			utils::hook::jump(0x140E3F6FB, sampler_skip_stub(0x140E3F703, 0x140E3F79D));
+			utils::hook::jump(0x140E3F7BB, sampler_skip_stub(0x140E3F7C3, 0x140E3F85D));
+			utils::hook::jump(0x140E3F8AB, sampler_skip_stub(0x140E3F8B3, 0x140E3F94D));
+			utils::hook::jump(0x140E3FBFB, sampler_default_stub(0x140E3FC03));
+			utils::hook::jump(0x140E3FCD3, sampler_default_stub(0x140E3FCDB));
+			utils::hook::jump(0x140E40242, sampler_default_stub(0x140E4024A));
+
+			// Precarga de shaders: sin ella cada shader nuevo (armas, efectos y rachas de los bots) se compila en plena
+			// partida y da tirones (en una partida de prueba, de 109 a 20). La opción "Precarga de
+			// shaders" del menú solo cambia r_preloadShadersFrontendAllow (que sí se guarda) y r_preloadShaders se quedaba
+			// a 0: aquí r_preloadShaders sigue siempre a la opción del menú.
+			scheduler::loop([]
+			{
+				const auto* allow = game::Dvar_FindVar("r_preloadShadersFrontendAllow");
+				const auto* preload = game::Dvar_FindVar("r_preloadShaders");
+				if (allow && preload && preload->current.enabled != allow->current.enabled)
+				{
+					game::Dvar_SetFromStringByName("r_preloadShaders", allow->current.enabled ? "1" : "0",
+						game::DVAR_SOURCE_INTERNAL);
+				}
+			}, scheduler::pipeline::main, 1s);
 		}
 	};
 }

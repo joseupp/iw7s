@@ -1,6 +1,16 @@
 title=IW7S
+short=¡Bienvenido a ^3IW7S!^7
+long=^3Version r1048b^7\n\n^3What's new^7\n- Offline public matches: public lobbies that work without servers, with their countdown, team assignment and transition into the match, just like the original game.\n- The match only starts when you press "Start match". The countdown works like in private matches: 5 visible seconds.\n- Pick your team in the lobby with R2. It is kept after a finished match and goes back to automatic if you leave the lobby or quit a match.\n- Bots that behave like players: they join the lobby gradually, each with their own name, rank, prestige, specialist and appearance, and keep their identity and team in the match. After the match most of them stay for the next one and some leave, just like a real lobby.\n- Default bot names are those of the game's original developers, with the IW clan tag in the lobby.\n- Balanced mixed difficulty. Each bot's rank matches its difficulty: veterans have high prestige levels and recruits have low ranks.\n- Bot menu in the lobby: number of allies and enemies, and the difficulty of each team.\n- "Find match" goes straight into the lobby. The game mode is changed from the lobby options.\n- Editable match rules. Your changes are kept until you pick another mode.\n- You earn XP and rank up even offline.\n- Message of the day, also in the public lobby.\n\n^3Graphics and textures^7\n- Custom textures: drop an image into the iw7s\images folder and it will always replace the game image with the same name. Works for weapons, camos, interface, icons, etc.\n- Dumping of the game's images, so you can edit them.\n- png2dds tool, which converts your images to the game's format.\n- Shader preload follows the menu option, for fewer stutters during matches.\n\n^3View and HUD^7\n- Weapon FOV independent from the view FOV.\n- Wider and better-tuned FOV, with aim-down-sights zoom consistent with the chosen FOV.\n- Sniper scopes as in the original.\n- Properly framed winners' circle.\n- Ammo bar in multiplayer.\n\n^3Fixes^7\n- Fixed crashes when going back to the menu while a map was loading, when leaving multiplayer and when closing the game.
+image=image_motd_main
+layout=1
+popup=1
+todas=1
+rotar=5
+
+[zombis]
+title=IW7S
 short=Bienvenido a ^3IW7S
 long=Bienvenido a ^3IW7S^7.\n\nCliente sin conexión de Infinite Warfare.
-image=image_motd_mp_dlc4_keyart_v1
+image=image_motd_main
 layout=1
 popup=1

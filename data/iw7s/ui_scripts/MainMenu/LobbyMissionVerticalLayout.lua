@@ -243,15 +243,15 @@ function LobbyMissionVerticalLayout( menu, controller )
 	end )
     StartButton:addEventHandler( "button_action", function ( f15_arg0, f15_arg1 )
 		-- Empieza ya la cuenta atrás final de la sala pública (lobby_bots.cpp)
-		if not Engine.GetDvarBool( "lobby_bots_start_requested" ) then
-			Engine.Exec( "lobby_startcountdown" )
+		if not Engine.GetDvarBool( "lobby_bots_game_start_requested" ) then
+			Engine.Exec( "lobby_partygo" )
 		end
 	end )
 	-- Como en la partida privada: con la cuenta atrás en marcha el botón se bloquea (candado) y pone "Iniciando partida".
 	-- Círculo / Escape la cancela (lobbymission2.lua).
 	local start_requested = nil
 	local update_start_button = function ()
-		local requested = Engine.GetDvarBool( "lobby_bots_start_requested" )
+		local requested = Engine.GetDvarBool( "lobby_bots_game_start_requested" )
 		if requested == start_requested then
 			return
 		end
