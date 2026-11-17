@@ -6,7 +6,7 @@ It is based on [IW7-Mod](https://github.com/auroramod/iw7-mod) and is the result
 
 > ***You must own [Call of Duty®: Infinite Warfare](https://store.steampowered.com/app/292730/Call_of_Duty_Infinite_Warfare/) on Steam.*** The game will not start if your account does not own it. Pirated copies are not supported.
 
-Current version: **r1048b** (beta).
+Current version: **r1049b** (beta).
 
 ---
 
@@ -71,15 +71,28 @@ Only the images in use at that moment are dumped: to get a weapon or camo textur
 
 ## Installation
 
-1. Copy `iw7s.exe` into the root of your Call of Duty: Infinite Warfare folder.
-2. Copy the `data\iw7s` folder from this repository into the root of the game folder, so you end up with `<game folder>\iw7s`.
-3. The first time, open Steam with your account and run `iw7s.exe`. After that, Steam doesn't need to be open.
+Download the latest `iw7s-rXXXXb.zip` from [Releases](https://github.com/joseupp/iw7s/releases).
+
+Required files:
+```
+├── iw7s.exe
+├── png2dds.exe   (optional, converts PNG textures to the game's DDS format)
+└── iw7s/
+    └── (useful files)
+```
+
+Move all files to your Call of Duty®: Infinite Warfare game folder.
+
+The first time, open Steam with your account and run `iw7s.exe`. After that, Steam doesn't need to be open.
 
 ## Building
 
+- Install [Visual Studio 2022](https://visualstudio.microsoft.com/vs) and enable `Desktop development with C++`
 - Clone the repository with [Git](https://git-scm.com/install/windows). **Do not download it as a ZIP**, as it would not include the dependencies.
-- Run `generate.bat`.
-- Build `build\iw7-mod.sln` with Visual Studio 2022.
+- Run `generate.bat` (updates the submodules and generates the solution with Premake)
+- Build the project via the solution file in `build\iw7s.sln`, or run `build.ps1` to build Release x64 from the command line
+
+The output executable is `iw7s.exe`. Only x64 is supported. The `iw7s` folder of the release is `data\iw7s` in this repository.
 
 ## Credits
 

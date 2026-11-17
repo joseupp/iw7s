@@ -1,3 +1,42 @@
+-- Textos de los menús con cadenas del propio juego (cambian con el idioma): el cliente es para jugar sin conexión, así
+-- que "Partida pública" pasa a "Partida local" (botones, títulos y rutas de los menús, también como argumento de otra
+-- cadena, p. ej. LUA_MENU_BREADCRUMB_2_ITEMS). La ventana de Demonware "Conectando con los servicios en línea"
+-- (FenceOnlineServices) pasa a "Cargando..."
+if Engine ~= nil and Engine.Localize ~= nil then
+	local localize_aliases = {
+		LUA_MENU_PUBLIC_MATCH_CAPS = "LUA_MENU_LOCAL_PLAY_CAPS",
+		MENU_MISSIONS_CAP = "EXE_LOCAL_PLAY",
+		XBOXLIVE_POPUP_CONNECTION = "MENU_LOADING_DOTS",
+		PLATFORM_POPUP_CONNECTION = "MENU_LOADING_DOTS",
+		MENU_POPUP_CONNECTION = "MENU_LOADING_DOTS"
+	}
+
+	local function alias( text )
+		if type( text ) ~= "string" then
+			return text
+		end
+		local at = text:sub( 1, 1 ) == "@"
+		local target = localize_aliases[at and text:sub( 2 ) or text]
+		if target == nil then
+			return text
+		end
+		return at and "@" .. target or target
+	end
+
+	local original_localize = Engine.Localize
+	Engine.Localize = function ( text, ... )
+		local count = select( "#", ... )
+		if count == 0 then
+			return original_localize( alias( text ) )
+		end
+		local args = { ... }
+		for i = 1, count do
+			args[i] = alias( args[i] )
+		end
+		return original_localize( alias( text ), unpack( args, 1, count ) )
+	end
+end
+
 -- Partida pública sin conexión: el emparejamiento de Demonware se queda en "Buscando una partida" para siempre.
 -- Mientras somos anfitrión de la sala se muestra el estado real de la sala (jugadores que faltan, cuenta atrás).
 if not Engine.InFrontend() or Lobby == nil or Lobby.GetStatusString == nil then

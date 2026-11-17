@@ -43,8 +43,8 @@ set online_acquire_ds_during_intermission 1
 set validate_drop_on_fail 1
 set compassPrototypeElevation 1
 set compassPrototypeFiring 1
-rule party_minlobbytime 30
-rule party_minplayers 14
+rule party_minlobbytime 20
+rule party_minplayers 6
 rule party_maxplayers 18
 rule party_matchedplayercount 1
 rule mming_minplayers_to_lobby 1
@@ -423,7 +423,7 @@ name PLAYLIST_TDM_NAME
 description MENU_KILL_PLAYERS_ON_OPPOSING_TEAMS
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_team_deathmatch"
@@ -444,7 +444,7 @@ name PLAYLIST_FFA_NAME
 description LUA_MENU_MP_DEATHMATCH_DESC
 unlockxp 0
 maxparty 1
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule cg_everyonehearseveryone 1
@@ -465,7 +465,7 @@ name PLAYLIST_DOM_NAME
 description LUA_MENU_MP_DOMINATION_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_domination"
@@ -486,7 +486,7 @@ name PLAYLIST_SD_NAME
 description LUA_MENU_MP_SD_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_search_n_destroy"
@@ -507,7 +507,7 @@ name PLAYLIST_HARDPOINT_NAME
 description LUA_MENU_MP_HARDPOINT_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_hardpoint"
@@ -541,7 +541,7 @@ name PLAYLIST_FL_TDM_NAME
 description LUA_MENU_MP_FRONTLINE_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_frontline"
@@ -558,7 +558,7 @@ name PLAYLIST_TDM_NAME
 description PLAYLIST_HC_TDM_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_tdm_hardcore"
@@ -581,7 +581,7 @@ name PLAYLIST_GRND_NAME_VARIANT
 description PLAYLIST_GRND_VARIANT_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_drop_zone"
@@ -603,7 +603,7 @@ name PLAYLIST_GUN_NAME
 description LUA_MENU_MP_GUN_DESC
 unlockxp 0
 maxparty 5
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 10
 rule party_matchedplayercount 1
 rule killswitch_simultaneous_deaths 1
@@ -756,7 +756,7 @@ name PLAYLIST_GROUND_WAR_NAME
 description PLAYLIST_GROUND_WAR_DESC
 unlockxp 0
 maxparty 9
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 18
 rule party_matchedplayercount 1
 image "gamemode_team_deathmatch"
@@ -809,7 +809,7 @@ name PLAYLIST_UPLINK_NAME
 description LUA_MENU_MP_UPLINK_DESC
 unlockxp 0
 maxparty 4
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 8
 rule party_matchedplayercount 1
 image "gamemode_uplink"
@@ -823,7 +823,7 @@ description PLAYLIST_CP_ZMB_DEVS_DESC
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -840,7 +840,7 @@ description PLAYLIST_CP_ZMB_DEVS_DESC
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -858,7 +858,7 @@ description
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -876,7 +876,7 @@ description
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -894,7 +894,7 @@ description
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -912,7 +912,7 @@ description LUA_MENU_ZM_BOSS_SPACELAND
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -931,7 +931,7 @@ description LUA_MENU_ZM_BOSS_RAVE
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -951,7 +951,7 @@ description LUA_MENU_ZM_BOSS_DISCO
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -971,7 +971,7 @@ description LUA_MENU_ZM_BOSS_TOWN
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -991,7 +991,7 @@ description LUA_MENU_ZM_BOSS_FINAL
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -1011,7 +1011,7 @@ description LUA_MENU_ZM_BOSS_DC
 maxparty 4
 unlockxp 0
 rule party_matchedplayercount 1
-rule party_minplayers 14
+rule party_minplayers 1
 rule mming_minplayers_to_lobby 1
 rule party_maxplayers 4
 rule scr_default_maxagents 24
@@ -1030,7 +1030,7 @@ name PLAYLIST_AON_NAME
 description PLAYLIST_AON_DESC
 unlockxp 0
 maxparty 3
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 10
 rule party_matchedplayercount 1
 rule cg_everyonehearseveryone 1
@@ -1066,7 +1066,7 @@ name PLAYLIST_GUN_NAME_EPIC
 description LUA_MENU_MP_GUN_DESC
 unlockxp 0
 maxparty 4
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 10
 rule party_matchedplayercount 1
 image "gamemode_gun_game"
@@ -1100,7 +1100,7 @@ name PLAYLIST_TAC_MOSHPIT
 description PLAYLIST_TAC_MOSHPIT_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule scr_conf_scorelimit 65
@@ -1180,7 +1180,7 @@ name PLAYLIST_CRANKED_NAME
 description PLAYLIST_CRANKED_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_cranked"
@@ -1213,7 +1213,7 @@ name PLAYLIST_DEMO_NAME
 description LUA_MENU_MP_DEMOLITION_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_demolition"
@@ -1245,7 +1245,7 @@ name PLAYLIST_TDM_HYPER_NAME
 description PLAYLIST_TDM_HYPER_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_team_deathmatch"
@@ -1279,7 +1279,7 @@ name PLAYLIST_R_AND_R_MOSHPIT
 description PLAYLIST_R_AND_R_MOSHPIT_DESC
 unlockxp 0
 maxparty 4
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 8
 rule party_matchedplayercount 1
 image "gamemode_reinforce"
@@ -1338,7 +1338,7 @@ name PLAYLIST_MAYHEM
 description PLAYLIST_MAYHEM_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule scr_game_casualScoreStreaks 1
@@ -1373,7 +1373,7 @@ name PLAYLIST_GESTURE_NAME
 description PLAYLIST_GESTURE_DESC
 unlockxp 0
 maxparty 4
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 10
 rule party_matchedplayercount 1
 rule cg_everyonehearseveryone 1
@@ -1398,7 +1398,7 @@ name PLAYLIST_DLCALL_TDM_NAME
 description PLAYLIST_DLCALL_TDM_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule online_matchmaking_do_not_use_dlc_mming 0
@@ -1428,7 +1428,7 @@ name PLAYLIST_DLCALL_MOSHPIT_HC_NAME
 description PLAYLIST_DLCALL_MOSHPIT_HC_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule online_matchmaking_do_not_use_dlc_mming 0
@@ -1470,7 +1470,7 @@ name PLAYLIST_DLCALL_MOSHPIT_NAME
 description PLAYLIST_DLCALL_MOSHPIT_DESC
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule online_matchmaking_do_not_use_dlc_mming 0
@@ -1491,7 +1491,7 @@ playlist 6
 name "#FREE Renaissance & Turista"
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule online_matchmaking_do_not_use_dlc_mming 0
@@ -1506,20 +1506,21 @@ playlist 28
 name "#FREE Permafrost & Carnage"
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 rule online_matchmaking_do_not_use_dlc_mming 0
 image "gamemode_team_deathmatch"
 mp_permafrost2,tdm,1
 mp_carnage2,dom,1
+mp_dome_dusk,tdm,1
 
 playlist 12 // KILL CONFIRMED
 name PLAYLIST_CONF_NAME
 description MENU_KILL_PLAYERS_ON_OPPOSING_TEAMS
 unlockxp 0
 maxparty 6
-rule party_minplayers 14
+rule party_minplayers 6
 rule party_maxplayers 12
 rule party_matchedplayercount 1
 image "gamemode_kill_confirmed"
@@ -1543,7 +1544,7 @@ category A
 categoryclass CORE
 name "#DLC"
 description "#DLC"
-include 22, 34, 15
+include 22, 34, 15, 6, 28
 image "icon_pl_clan"
 category B
 categoryclass CORE
